@@ -109,7 +109,6 @@ spec:
 
 You can find explanations for what these arguments mean in the [OAuth2 Proxy docs](https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/overview) but I want to give you some pointers on why these particular arguments are useful / required.
 
-<div class="table-wrapper" markdown="block">
 | Argument| Example value | Why is it needed? |
 | --- | --- | --- |
 | azure-tenant | "abcd1234-5678-91ef-23gh-ij4kl5mn6o" | Your Azure AD tenant id |
@@ -134,7 +133,6 @@ You can find explanations for what these arguments mean in the [OAuth2 Proxy doc
 | skip-provider-button | true | There is an option to show an interstitial page giving you the option to choose your authentication provider. Useful if you are using multiple authentication methods |
 | upstream | static://202 | The upstream page to show when you've connected and authenticated directly to the OAuth2 Proxy. You could set this to an application URL if you want to redirect to a default application but this static page is enough to tell you the OAuth2 Proxy is working. When you authenticate, it will show a simple page saying `Authenticated` |
 | whitelist-domain | ".domain.com" | Domain names you want to allow redirection to. Similar to email domains but for the destination application rather than the user |
-</div>
 
 Then, create the required middlewares:
 ```
