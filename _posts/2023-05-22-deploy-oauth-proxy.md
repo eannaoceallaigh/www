@@ -171,7 +171,7 @@ The middlewares are used to intercept the request and send it to the OAuth2 Prox
 
 The forwardAuth address can be set to a fully qualified domain name but it should be noted that DNS for that URL will be required. In the example above, we are using the cluster DNS name of the kubernetes service which will always work. If you use a FQDN and the DNS changes or is unreachable, the application won't work.
 
-The cluster DNS name for the service follows the format `<servicename>.<namespace>`.
+The cluster DNS name for the service follows the format `servicename.namespace`
 
 The official docs have an [example](https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/overview#forwardauth-with-401-errors-middleware) that uses the `/oauth2/auth` endpoint in the address, however, I have found that this does not always work, so you should use the `/oauth2/auth_or_start` endpoint instead as per my example.
 
