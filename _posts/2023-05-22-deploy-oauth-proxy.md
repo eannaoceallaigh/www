@@ -12,8 +12,6 @@ tags:
 classes: wide
 ---
 
-## Deploying OAuth2 Proxy with the Azure Active Directory provider and Traefik reverse proxy
-
 In this tutorial, we will be deploying OAuth2 Proxy to a kubernetes cluster using Azure Active Directory as the authentication provider and Traefik as the reverse proxy.
 
 We will also be using FluxCD to deploy Kubernetes resources via Helm.
