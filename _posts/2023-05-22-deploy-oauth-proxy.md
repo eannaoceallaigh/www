@@ -51,7 +51,7 @@ spec:
   timeout: 3m
 ```
 
-Next, create a helm release:
+Next, create a helm release and replace the example values like `domain.com` with your own values.
 ```
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
