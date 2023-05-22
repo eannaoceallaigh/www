@@ -111,7 +111,7 @@ You can find explanations for what these arguments mean in the [OAuth2 Proxy doc
 | azure-tenant | "abcd1234-5678-91ef-23gh-ij4kl5mn6o" | Your Azure AD tenant id |
 | client-id | "abcd1234-5678-91ef-23gh-ij4kl5mn6o" | The client id of the app registration you will have created in Azure AD |
 | client-secret | "abcdefghijklmnopqrstuvwxyz1234456789?~!@$%" | The client secret you will have generated for the app registration in Azure AD |
-| cookie-domain | ".domain.com, .domain.net" | So you cache cookies for the correct domain. It can be set to "*" to allow all domains |
+| cookie-domain | ".domain.com, .domain.net" | Used to cache cookies for the correct domain. It can be set to "*" to allow all domains |
 | cookie-secret | "wj7fY0MwSPKZZoxUaUNnoeqgN0lEr5f-F6vGIFO1AR4=" | A randomly generated secret from the command line on your computer. See [here](https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/overview#generating-a-cookie-secret) |
 | email-domain | "domain.com" | Can be used to restrict sign in to only certain domains. Use "*" to allow all domains |
 | extra-jwt-issuers | "https://login.microsoftonline.com/YOUR-TENANT-ID/v2.0=YOUR-CLIENT-ID" | A list of extra JSON Web Token (JWT) issuer URLs. This is needed as there are two endpoints that Azure AD offers for authentication  |
