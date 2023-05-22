@@ -25,8 +25,6 @@ Requirements:
 
 ### What is Oauth2 Proxy?
 
-> A reverse proxy and static file server that provides authentication using Providers (Google, GitHub, and others) to validate accounts by email, domain or group.
-
 If you have an application you want to make available on the internet but you want to grant access only to authorised users, you can use OAuth2 Proxy to force visitors to authenticate with an authentication provider like Google or Microsoft.
 
 The tool is mainly focused on using NGINX reverse proxy so much of the official documentation is around that technology. This guide will give you guidance on how to use OAuth2 Proxy with Traefik reverse proxy which requires some specific setup to work.
