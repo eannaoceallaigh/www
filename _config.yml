@@ -57,7 +57,7 @@ plugins:
   - jekyll-include-cache
 
 author:
-  name   : "First Lastname"
+  name   : "Eanna O'Ceallaigh"
   avatar : "/assets/images/bio-photo.jpg"
   links:
     - label: "Website"
