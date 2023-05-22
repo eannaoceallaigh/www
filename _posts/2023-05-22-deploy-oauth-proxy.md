@@ -179,4 +179,4 @@ The cluster DNS name for the service follows the format `<servicename>-<namespac
 
 The official docs have an [example](https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/overview#forwardauth-with-401-errors-middleware) that uses the `/oauth2/auth` endpoint in the address, however, I have found that this does not always work, so you should use the `/oauth2/auth_or_start` endpoint instead as per my example.
 
-See also: https://github.com/oauth2-proxy/oauth2-proxy/issues/46
+See also: [https://github.com/oauth2-proxy/oauth2-proxy/issues/46](https://github.com/oauth2-proxy/oauth2-proxy/issues/46)
