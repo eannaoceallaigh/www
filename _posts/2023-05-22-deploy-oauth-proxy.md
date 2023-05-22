@@ -9,6 +9,7 @@ tags:
   - kubernetes
   - helm
   - azure
+layout: wide
 ---
 
 ## Deploying OAuth2 Proxy with the Azure Active Directory provider and Traefik reverse proxy
