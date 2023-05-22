@@ -22,7 +22,6 @@ github_username: eannaoceallaigh
 minimal_mistakes_skin: contrast
 repository: eannaoceallaigh/www
 search: true
-layout: splash
 
 # Build settings
 markdown: kramdown
@@ -67,6 +66,14 @@ author:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
       url: "https://github.com/eannaoceallaigh"
+
+header:
+  overlay_image: /assets/images/unsplash-image-1.jpg
+  overlay_filter: 0.5 # same as adding an opacity of 0.5 to a black background
+  caption: "Photo credit: [**Unsplash**](https://unsplash.com)"
+  actions:
+    - label: "More Info"
+      url: "https://unsplash.com"
 
 footer:
   links:
