@@ -14,7 +14,7 @@ classes: wide
 
 In this tutorial, we will be deploying OAuth2 Proxy to a kubernetes cluster using Azure Active Directory as the authentication provider and Traefik as the reverse proxy.
 
-We will also be using FluxCD to deploy Kubernetes resources via Helm.
+We will also be using FluxCD with Kustomize to deploy Kubernetes resources via Helm.
 
 Requirements:
 
