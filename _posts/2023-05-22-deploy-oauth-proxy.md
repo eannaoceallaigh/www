@@ -111,7 +111,7 @@ You can find explanations for what these arguments mean in the [OAuth2 Proxy doc
 
 <div class="table-wrapper" markdown="block">
 | Argument| Example value | Why is it needed? |
-| ---------- | ---------- | ---------- |
+| --- | --- | --- |
 | azure-tenant | "abcd1234-5678-91ef-23gh-ij4kl5mn6o" | Your Azure AD tenant id |
 | client-id | "abcd1234-5678-91ef-23gh-ij4kl5mn6o" | The client id of the app registration you will have created in Azure AD |
 | client-secret | "abcdefghijklmnopqrstuvwxyz1234456789?~!@$%" | The client secret you will have generated for the app registration in Azure AD |
