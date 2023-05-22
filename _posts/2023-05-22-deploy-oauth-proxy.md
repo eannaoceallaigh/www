@@ -35,7 +35,7 @@ There is an official helm chart provided by the developers of OAuth2 Proxy.
 
 The source code for this can be found on [GitHub](https://github.com/oauth2-proxy/manifests).
 
-The following kubernetes manifests will get you up and running but there are slight improvements to be made to these configs which we will explore later on in the guide e.g. mounting arguments using kubernetes secrets.
+The following kubernetes manifests will get you up and running but there are slight improvements to be made to these configs which we will explore later on in the guide e.g. using kubernetes secrets.
 
 In your git repository, add the helm repository to install the chart on the cluster:
 
