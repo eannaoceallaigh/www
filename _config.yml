@@ -22,6 +22,7 @@ github_username: eannaoceallaigh
 minimal_mistakes_skin: contrast
 repository: eannaoceallaigh/www
 search: true
+layout: splash
 
 # Build settings
 markdown: kramdown
