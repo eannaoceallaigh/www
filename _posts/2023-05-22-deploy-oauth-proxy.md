@@ -588,7 +588,7 @@ However, you can also use OAuth2 Proxy to perform single sign on (SSO) with appl
 
 Some applications will work with the setup above as is, but some may experience errors that prevent you from signing in with SSO.
 
-In some cases, this can be because of the size of the cookies. By default, the cookie limit in OAuth2 Proxy is 4KB but some authentication provider, e.g. Azure AD, provide much larger cookies.
+In some cases, this can be because of the size of the cookies. By default, the cookie limit in OAuth2 Proxy is 4KB but some authentication providers, e.g. Azure AD, provide much larger cookies.
 
 If you're having issues using SSO with OAuth2 Proxy, you may see error messages in the pod logs telling you the cookie is too large and that it exceeds the 4KB limit.
 
@@ -628,7 +628,7 @@ The values that are available are inherited from the upstream chart and you can 
 
 In the example above, I am using an existing persistentVolume and persistentVolumeClaim that I have created separately but you can remove the `existingClaim` value to tell the chart to create its own persistentVolume and persistentVolumeClaim on the cluster. Be aware, however, that you may experience permissions errors if you have not allowed the cluster to provision storage.
 
-In the example above, I am also using a secret and environment variable to store the password for redis as detailed in [this section](https://github.com/eannaoceallaigh/www/blob/master/_posts/2023-05-22-deploy-oauth-proxy.md#ideal-setup-with-kubernetes-secrets) of this guide. You can just add another secret to the yaml file and another environment variable to the helmrelease:
+In the example above, I am also using a secret and environment variable to store the password for redis as detailed in [this section](https://www.eannaoceallaigh.com/blog/deploy-oauth-proxy/#ideal-setup-with-kubernetes-secrets) of this guide. You can just add another secret to the yaml file and another environment variable to the helmrelease:
 
 <details>
 <summary>View code</summary>
