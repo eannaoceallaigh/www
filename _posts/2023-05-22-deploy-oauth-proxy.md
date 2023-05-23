@@ -418,11 +418,19 @@ stringData:
 
 You can save this file in your oauth2-proxy app folder and then use the sops cli command to encrypt it. Depending on whether you use age or a cloud secret store like Azure Key Vault, the command will vary slightly.
 
-With age: `sops --encrypt --age <my-age-public-key> --encrypted-regex "^(data|stringData)$" --in-place /path/to/file/oauth2-proxy-values.enc.yaml`
-Source: https://fluxcd.io/flux/guides/mozilla-sops/#encrypting-secrets-using-age
+With age: 
 
-With Azure Key Vault: sops --encrypt --azure-kv https://my-key-vault-name.vault.azure.net/keys/sops-key/abcdefghi123456789 --encrypted-regex "^(data|stringData)$" --in-place /path/to/file/oauth2-proxy-values.enc.yaml
-Source: https://github.com/mozilla/sops#24encrypting-using-azure-key-vault
+```
+sops --encrypt --age <my-age-public-key> --encrypted-regex "^(data|stringData)$" --in-place /path/to/file/oauth2-proxy-values.enc.yaml
+```
+[Source](https://fluxcd.io/flux/guides/mozilla-sops/#encrypting-secrets-using-age)
+
+With Azure Key Vault: 
+
+```
+sops --encrypt --azure-kv https://my-key-vault-name.vault.azure.net/keys/sops-key/abcdefghi123456789 --encrypted-regex "^(data|stringData)$" --in-place /path/to/file/oauth2-proxy-values.enc.yaml
+```
+[Source](https://github.com/mozilla/sops#24encrypting-using-azure-key-vault)
 
 You can then safely commit the encrypted secret to GitHub because it can only be decrypted using the private key which will only be stored on your cluster, as well as locally on your computer (as with age) or in your cloud secret store (as with Azure Key Vault).
 
