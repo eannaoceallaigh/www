@@ -67,7 +67,6 @@ spec:
 {% endhighlight %}
 	
 </details><br>
-
 ### Deploying the helm release
 
 Create a helm release and replace the example values like `domain.com` with your own values.
@@ -127,8 +126,7 @@ spec:
 	- oauth2-proxy-01.domain.com
 {% endhighlight %}
 	
-</details><br>
-	
+</details><br>	
 You can find explanations for what these arguments mean in the [OAuth2 Proxy docs](https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/overview) but I want to give you some pointers on why these particular arguments are useful / required.
 
 | Argument| Example value | Why is it needed? |
