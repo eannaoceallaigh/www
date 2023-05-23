@@ -67,7 +67,8 @@ spec:
 
 Create a helm release and replace the example values like `domain.com` with your own values.
 
-{%details Click to expand %}
+<details>
+	<summary>Click to expand</summary>
 	~~~ yaml
 	apiVersion: helm.toolkit.fluxcd.io/v2beta1
 	kind: HelmRelease
@@ -119,7 +120,7 @@ Create a helm release and replace the example values like `domain.com` with your
 	      hosts:
 		- oauth2-proxy-01.domain.com
 	~~~
-{% enddetails %}
+</details>
 
 You can find explanations for what these arguments mean in the [OAuth2 Proxy docs](https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/overview) but I want to give you some pointers on why these particular arguments are useful / required.
 
