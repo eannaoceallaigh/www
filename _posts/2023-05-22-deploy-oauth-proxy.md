@@ -10,11 +10,7 @@ tags:
   - helm
   - azure
 classes: wide
-sidebar-sample:
-  - title: "Navigation"
-    children:
-      - title: "What is Oauth2 Proxy?"
-        url: https://www.eannaoceallaigh.com/blog/deploy-oauth-proxy/#what-is-oauth2-proxy
+toc: true
 ---
 
 In this tutorial, we will be deploying OAuth2 Proxy to a kubernetes cluster using Azure Active Directory as the authentication provider and Traefik as the reverse proxy.
