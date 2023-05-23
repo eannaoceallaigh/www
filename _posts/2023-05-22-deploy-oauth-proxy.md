@@ -294,8 +294,33 @@ Any application should do but, for this example, we will use a simple hello worl
 Similar to what we've done with Traefik and OAuth2 Proxy, we need a helm release and an ingress. In this case, we will need a git repository manifest instead of a helm repository.
 
 First, we'll deploy the application without placing it behind OAuth2 Proxy to make sure it's reachable.
+	
+#### Deploying the git repository
 
-#### Helm release
+<details>
+<summary>View code</summary>
+
+{% highlight yaml %}
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: GitRepository
+metadata:
+  name: hello-kubernetes-charts
+  namespace: default
+spec:
+  interval: 5m0s
+  url: https://github.com/paulbouwer/hello-kubernetes
+  ref:
+    branch: main
+  ignore: |
+    # exclude all
+    /*
+    # include deploy dir
+    !/deploy/helm
+{% endhighlight %}
+	
+</details>
+
+#### Deploying the helm release
 
 <details>
 <summary>View code</summary>
@@ -324,7 +349,7 @@ spec:
 	
 </details>
 
-#### Ingress
+#### Deploying the ingress
 
 <details>
 <summary>View code</summary>
@@ -349,31 +374,6 @@ spec:
                 name:  hello-kubernetes-hello-kubernetes
                 port:
                   number: 80
-{% endhighlight %}
-	
-</details>
-
-#### Git repository
-
-<details>
-<summary>View code</summary>
-
-{% highlight yaml %}
-apiVersion: source.toolkit.fluxcd.io/v1beta2
-kind: GitRepository
-metadata:
-  name: hello-kubernetes-charts
-  namespace: default
-spec:
-  interval: 5m0s
-  url: https://github.com/paulbouwer/hello-kubernetes
-  ref:
-    branch: main
-  ignore: |
-    # exclude all
-    /*
-    # include deploy dir
-    !/deploy/helm
 {% endhighlight %}
 	
 </details><br>
