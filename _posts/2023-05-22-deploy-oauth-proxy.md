@@ -68,59 +68,58 @@ spec:
 Create a helm release and replace the example values like `domain.com` with your own values.
 
 <details>
-	<summary>Click to expand</summary>
-	<pre>
-	~~~ yaml
-	apiVersion: helm.toolkit.fluxcd.io/v2beta1
-	kind: HelmRelease
-	metadata:
-	  name: oauth2-proxy
-	  namespace: default
-	spec:
-	  releaseName: oauth2-proxy
-	  chart:
-	    spec:
-	      chart: oauth2-proxy
-	      version: 6.12.0
-	      sourceRef:
-		kind: HelmRepository
-		name: oauth2-proxy-charts
-		namespace: default
-	  interval: 5m
-	  values:
-	    extraArgs:
-	      cookie-domain: ".domain.com, .domain.net"
-	      email-domain: "domain.com"
-	      pass-authorization-header: true
-	      pass-basic-auth: false
-	      pass-host-header: true
-	      pass-user-headers: true
-	      provider: "azure"
-	      redirect-url: https://oauth2-proxy-01.domain.com/oauth2/callback
-	      reverse-proxy: true
-	      set-authorization-header: true
-	      set-xauthrequest: true
-	      show-debug-on-error: true
-	      skip-provider-button: true
-	      silence-ping-logging: true
-	      upstream: static://202
-	      whitelist-domain: ".domain.com"
-	      client-id: "<CLIENT-ID>"
-	      client-secret: "<CLIENT-SECRET>"
-	      cookie-secret: <COOKIE-SECRET>"
-	      oidc-issuer-url: "https://sts.windows.net/<TENANT-ID>/"
-	      extra-jwt-issuers: "https://login.microsoftonline.com/<TENANT-ID>/v2.0=<CLIENT-ID>"
-	      azure-tenant: "<TENANT-ID>"
-	    redis:
-	      enabled: false
-	    ingress:
-	      annotations:
-		traefik.ingress.kubernetes.io/router.tls: "true"
-	      className: traefik
-	      enabled: true
-	      hosts:
-		- oauth2-proxy-01.domain.com
-	~~~
+<summary>
+Click to expand
+</summary>
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: oauth2-proxy
+  namespace: default
+spec:
+  releaseName: oauth2-proxy
+  chart:
+    spec:
+      chart: oauth2-proxy
+      version: 6.12.0
+      sourceRef:
+	kind: HelmRepository
+	name: oauth2-proxy-charts
+	namespace: default
+  interval: 5m
+  values:
+    extraArgs:
+      cookie-domain: ".domain.com, .domain.net"
+      email-domain: "domain.com"
+      pass-authorization-header: true
+      pass-basic-auth: false
+      pass-host-header: true
+      pass-user-headers: true
+      provider: "azure"
+      redirect-url: https://oauth2-proxy-01.domain.com/oauth2/callback
+      reverse-proxy: true
+      set-authorization-header: true
+      set-xauthrequest: true
+      show-debug-on-error: true
+      skip-provider-button: true
+      silence-ping-logging: true
+      upstream: static://202
+      whitelist-domain: ".domain.com"
+      client-id: "<CLIENT-ID>"
+      client-secret: "<CLIENT-SECRET>"
+      cookie-secret: <COOKIE-SECRET>"
+      oidc-issuer-url: "https://sts.windows.net/<TENANT-ID>/"
+      extra-jwt-issuers: "https://login.microsoftonline.com/<TENANT-ID>/v2.0=<CLIENT-ID>"
+      azure-tenant: "<TENANT-ID>"
+    redis:
+      enabled: false
+    ingress:
+      annotations:
+	traefik.ingress.kubernetes.io/router.tls: "true"
+      className: traefik
+      enabled: true
+      hosts:
+	- oauth2-proxy-01.domain.com
 <pre>
 </details>
 
