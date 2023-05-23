@@ -333,3 +333,4 @@ spec:
 ```
 
 These manifests should deploy the Hello Kubernetes application and if you open the URL in your web browser, you should see something like this:
+![https://raw.githubusercontent.com/eannaoceallaigh/www/master/assets/images/hello-kubernetes.png](https://raw.githubusercontent.com/eannaoceallaigh/www/master/assets/images/hello-kubernetes.png)
