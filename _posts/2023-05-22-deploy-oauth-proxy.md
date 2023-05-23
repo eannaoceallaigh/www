@@ -11,7 +11,6 @@ tags:
   - azure
 classes: wide
 toc: true
-permalink: /posts/
 ---
 
 In this tutorial, we will be deploying OAuth2 Proxy to a kubernetes cluster using Azure Active Directory as the authentication provider and Traefik as the reverse proxy.
