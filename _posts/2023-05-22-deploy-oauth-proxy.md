@@ -392,7 +392,9 @@ Sign in and then you'll be redirected to the Hello Kubernetes application.
 
 Now we've deployed our application behind OAuth2 Proxy, it's time to make some tweaks. Traefik and Hello Kubernetes are fine as is but we can improve on OAuth2-Proxy.
 
-The main thing we can do is to convert our arguments into secrets which can then be mounted in our pod. This is better for security and it means we can safely commit our secrets to code without worrying about them being visible in plain text so we don't need a third party secret store.
+The main thing we can do is to convert our arguments into secrets which can then be mounted in our pod. This is better for security and it means we can safely commit our secrets to code without worrying about them being visible in plain text so we don't need a third party secret store like Azure Key Vault, but you can use that if you wish. 
+
+We won't go into using Azure Key Vault to store our secrets and access them on the cluster here. You can find information on how to do that in the [Microsoft docs](https://learn.microsoft.com/en-us/azure/aks/csi-secrets-store-driver).
 
 To accomplish this, we will use a tool from Mozilla called SOPS. You can follow [this guide](https://fluxcd.io/flux/guides/mozilla-sops/) from Flux to get set up with SOPS on your cluster.
 
