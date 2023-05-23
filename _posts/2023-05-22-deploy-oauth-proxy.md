@@ -253,3 +253,83 @@ oauth2-proxy-59cb698789-mtmwq   1/1     Running   0          12h
 If you've configured your DNS, you should be able to connect to OAuth2 Proxy in a web browser. Since we've configured the upstream as `static://202`, we're greeted with a white page with the word `Authenticated` in the top left corner.
 
 ![https://github.com/eannaoceallaigh/www/blob/16307bc1e80e14fde380e8bfac6131057dbb24ad/assets/images/oauth2-proxy-authenticated.png](https://raw.githubusercontent.com/eannaoceallaigh/www/16307bc1e80e14fde380e8bfac6131057dbb24ad/assets/images/oauth2-proxy-authenticated.png)
+
+### Deploying an application behind OAuth2 Proxy
+
+To see OAuth2 Proxy providing authentication to another application, we first need to deploy one with an ingress using Traefik.
+
+Any application should do but, for this example, we will use a simple hello world style application called Hello Kubernetes.
+
+Similar to what we've done with Traefik and OAuth2 Proxy, we need a helm release and an ingress. In this case, we will need a git repository manifest instead of a helm repository.
+
+First, we'll deploy the application without placing it behind OAuth2 Proxy to make sure it's reachable.
+
+#### Helm release
+
+```
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: hello-kubernetes
+  namespace: default
+spec:
+  releaseName: hello-kubernetes
+  chart:
+    spec:
+      chart: deploy/helm/hello-kubernetes
+      version: 1.0.0
+      sourceRef:
+        kind: GitRepository
+        name: hello-kubernetes-charts
+        namespace: default
+  interval: 5m
+  values:
+    service:
+      type: ClusterIP
+ ```
+
+#### Ingress
+
+```
+kind: Ingress
+metadata:
+  name: hello-kubernetes
+  namespace: default
+  annotations:
+    traefik.ingress.kubernetes.io/router.tls: "true"
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: hello-kubernetes.domain.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name:  hello-kubernetes-hello-kubernetes
+                port:
+                  number: 80
+```
+
+#### Git repository
+
+```
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: GitRepository
+metadata:
+  name: hello-kubernetes-charts
+  namespace: default
+spec:
+  interval: 5m0s
+  url: https://github.com/paulbouwer/hello-kubernetes
+  ref:
+    branch: main
+  ignore: |
+    # exclude all
+    /*
+    # include deploy dir
+    !/deploy/helm
+```
+
+These manifests should deploy the Hello Kubernetes application and if you open the URL in your web browser, you should see something like this:
