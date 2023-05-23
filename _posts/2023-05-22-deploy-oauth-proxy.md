@@ -22,6 +22,7 @@ Requirements:
 - git repository [configured with flux](https://fluxcd.io/flux/get-started/)
 - kubernetes cluster
 - kubectl tool installed your computer
+- tls certificates configured on your cluster
 
 ### What is Oauth2 Proxy?
 
@@ -37,6 +38,8 @@ The source code for this can be found on [GitHub](https://github.com/oauth2-prox
 
 The following kubernetes manifests will get you up and running but there are slight improvements to be made to these configs which we will explore later on in the guide e.g. using kubernetes secrets.
 
+### Deploying the helm repository
+
 In your git repository, add the helm repository to install the chart on the cluster:
 
 ```
@@ -51,7 +54,9 @@ spec:
   timeout: 3m
 ```
 
-Next, create a helm release and replace the example values like `domain.com` with your own values.
+### Deploying the helm release
+
+Create a helm release and replace the example values like `domain.com` with your own values.
 ```
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
@@ -131,7 +136,59 @@ You can find explanations for what these arguments mean in the [OAuth2 Proxy doc
 | upstream | static://202 | The upstream page to show when you've connected and authenticated directly to the OAuth2 Proxy. You could set this to an application URL if you want to redirect to a default application but this static page is enough to tell you the OAuth2 Proxy is working. When you authenticate, it will show a simple page saying `Authenticated` |
 | whitelist-domain | ".domain.com" | Domain names you want to allow redirection to. Similar to email domains but for the destination application rather than the user |
 
-Then, create the required middlewares:
+Redis can be deployed in instances where the cookies are too large and cause issues with authenticating to your application. This can be the case in some applications that support Single Sign On (SSO). Our ideal setup will have redis enabled and we will come back to this later.
+
+The chart contains an ingress controller template as per the example above. You will need to create an ingressClass by deploying Traefik using their [official helm chart](https://github.com/traefik/traefik-helm-chart/tree/master/traefik). The ingressClass will be named after your traefik helm release. If you use the file below, your ingressClass will be called `traefik`. Replace `X.X.X.X` with an appropriate IP address.
+
+```
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: traefik
+  namespace: default
+spec:
+  values:
+    ingressRoute:
+      dashboard:
+        enabled: false
+    globalArguments:
+      - --global.sendanonymoususage=false
+    ingressClass:
+      enabled: true
+      isDefaultClass: true
+    logs:
+      general:
+        level: DEBUG
+      access:
+        enabled: true
+    ports:
+      traefik:
+        expose: true
+      web:
+        redirectTo: websecure
+    service:
+      spec: 
+        loadBalancerIP: "X.X.X.X"
+  chart:
+    spec:
+      chart: traefik
+      version: 23.0.1
+      sourceRef:
+        kind: HelmRepository
+        name: traefik-charts
+        namespace: defaults
+  interval: 5m
+```
+
+The annotation `traefik.ingress.kubernetes.io/router.tls: "true"` will tell Traefik to use https instead of http with a TLS certificate. You will need to configure a TLS certificate on your cluster to avoid certificate error messages in your browser from using the certificate that comes with Traefik which won't be trusted.
+
+This is coupled with `web: redirectTo: websecure` which will redirect http requests to https.
+
+There are many ways to deploy and use certificates with Traefik that will depend on your setup so we won't go into that in depth here. If you've never set something like this up before, the cert-manager [docs](https://cert-manager.io/docs/) are a good resource to get started with.
+
+### Deploying the middlewares
+
+Create the required middlewares:
 ```
 ---
 apiVersion: traefik.containo.us/v1alpha1
@@ -176,3 +233,21 @@ The cluster DNS name for the service follows the format `servicename.namespace`
 The official docs have an [example](https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/overview#forwardauth-with-401-errors-middleware) that uses the `/oauth2/auth` endpoint in the address, however, I have found that this does not always work, so you should use the `/oauth2/auth_or_start` endpoint instead as per my example.
 
 See also: [https://github.com/oauth2-proxy/oauth2-proxy/issues/46](https://github.com/oauth2-proxy/oauth2-proxy/issues/46)
+
+### Checking progress
+
+Once you commmitted these files to your repo and flux has synced the changes with your cluster, you should see the helm release successfully deployed by running `kubectl get helmrelease`:
+
+```
+NAME           AGE   READY   STATUS
+oauth2-proxy   4d    True    Release reconciliation succeeded
+```
+
+You can run `kubectl get pods` to view the running pods:
+
+```
+NAME                            READY   STATUS    RESTARTS   AGE
+oauth2-proxy-59cb698789-mtmwq   1/1     Running   0          12h
+```
+
+If you've configured your DNS, you should be able to connect to OAuth2 Proxy in a web browser. Since we've configured the upstream as `static://202`, we're greeted with a white page with the word `Authenticated` in the top left corner.
