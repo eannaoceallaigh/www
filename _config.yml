@@ -25,6 +25,9 @@ search: true
 
 # Build settings
 markdown: CommonMarkGhPages
+commonmark:
+  options: ["SMART", "FOOTNOTES"]
+  extensions: ["strikethrough", "autolink", "tables"]
 remote_theme: mmistakes/minimal-mistakes
 # Outputting
 permalink: /:categories/:title/
