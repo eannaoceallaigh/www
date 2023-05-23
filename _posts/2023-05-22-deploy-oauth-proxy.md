@@ -26,7 +26,7 @@ Requirements:
 - [kubectl](https://kubernetes.io/docs/tasks/tools/) tool installed your computer
 - tls certificates configured on your cluster
 
-You can also deploy the helm releases we will be using manually using `kubectl apply -f helmrelease.yaml` if you don't want to set up Flux. You can also avoid having to use TLS certificates if you're just testing this out locally but the guide will assume you are using all of the above.
+You can also deploy the helm releases we will be using manually by running `kubectl apply -f helmrelease.yaml` if you don't want to set up Flux. You can also avoid having to use TLS certificates if you're just testing this out locally but the guide will assume you are using all of the above.
 
 # What is Oauth2 Proxy?
 
