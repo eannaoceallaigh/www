@@ -25,6 +25,8 @@ search: true
 
 # Build settings
 markdown: kramdown
+kramdown:
+  toc_levels: 1..2
 remote_theme: mmistakes/minimal-mistakes
 # Outputting
 permalink: /:categories/:title/
