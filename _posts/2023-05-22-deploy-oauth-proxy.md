@@ -18,17 +18,26 @@ We will also be using FluxCD with Kustomize to deploy Kubernetes resources via H
 
 Requirements:
 
+- [Azure AD tenant](https://www.microsoft.com/en-us/security/business/identity-access/azure-active-directory-enable)
 - domain name
 - git repository [configured with flux](https://fluxcd.io/flux/get-started/)
 - kubernetes cluster
-- kubectl tool installed your computer
+- [kubectl](https://kubernetes.io/docs/tasks/tools/) tool installed your computer
 - tls certificates configured on your cluster
+
+You can also deploy the helm releases we will be using manually using `kubectl apply -f helmrelease.yaml` if you don't want to set up Flux. You can also avoid having to use TLS certificates if you're just testing this out locally but the guide will assume you are using all of the above.
 
 ### What is Oauth2 Proxy?
 
 If you have an application you want to make available on the internet but you want to grant access only to authorised users, you can use OAuth2 Proxy to force visitors to authenticate with an authentication provider like Google or Microsoft.
 
 The tool is mainly focused on using NGINX reverse proxy so much of the official documentation is around that technology. This guide will give you guidance on how to use OAuth2 Proxy with Traefik reverse proxy which requires some specific setup to work.
+
+### Set up for Azure AD
+
+The official docs have clear guidance on setting up an application registration in Azure Active Directory. Follow their [guide](https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/oauth_provider#azure-auth-provider) for this step and come back here once you've completed that.
+
+For this we will be using the v1 endpoint but I have also enabled the v2 endpoint in the application manifest as per point 4 in the linked guide.
 
 ### Deploying OAuth2 Proxy to Kubernetes using Helm and Flux
 
@@ -185,6 +194,8 @@ The annotation `traefik.ingress.kubernetes.io/router.tls: "true"` will tell Trae
 This is coupled with `web: redirectTo: websecure` which will redirect http requests to https.
 
 There are many ways to deploy and use certificates with Traefik that will depend on your setup so we won't go into that in depth here. If you've never set something like this up before, the cert-manager [docs](https://cert-manager.io/docs/) are a good resource to get started with.
+
+If you're just testing this all out locally, you can set `traefik.ingress.kubernetes.io/router.tls` to false or not set it at all and remove the redirect so it only uses http, however, I have not tested this approach specifically for this guide and you may run into issues with the Azure AD application registration as it requires https redirect URIs unless you can use `http://localhost`.
 
 ### Deploying the middlewares
 
