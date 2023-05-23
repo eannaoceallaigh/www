@@ -320,7 +320,8 @@ spec:
       type: ClusterIP
 {% endhighlight %}
 	
-</details><br>
+</details>
+
 #### Ingress
 
 <details>
@@ -348,7 +349,8 @@ spec:
                   number: 80
 {% endhighlight %}
 	
-</details><br>
+</details>
+
 #### Git repository
 
 <details>
@@ -575,7 +577,8 @@ spec:
         kind: Secret
 {% endhighlight %}
 	
-</details><br>	
+</details>
+
 ### Extras - Redis cache
 
 So far, we have used OAuth2 Proxy to require authentication to access an application that has no authentication mechanism of its own.
@@ -619,8 +622,7 @@ To do this, simply add the required values to your helm release:
           connectionUrl: redis://oauth2-proxy-redis-master:6379
 {% endhighlight %}
 	
-</details>
-
+</details><br>
 The values that are available are inherited from the upstream chart and you can view them [here](https://github.com/bitnami/charts/tree/master/bitnami/redis#parameters).
 
 In the example above, I am using an existing persistentVolume and persistentVolumeClaim that I have created separately but you can remove the `existingClaim` value to tell the chart to create its own persistentVolume and persistentVolumeClaim on the cluster. Be aware, however, that you may experience permissions errors if you have not allowed the cluster to provision storage.
@@ -647,9 +649,7 @@ stringData:
     redis-password: abcd1234
 {% endhighlight %}
 	
-</details>
-	
-
+</details><br>
 <details>
 <summary>View code</summary>
 
@@ -663,8 +663,7 @@ extraEnv:
 {% endhighlight %}
 	
 </details>
-	
-	
+
 ### Summary
 
 In this guide, we've explored how to deploy an application to a kubernetes cluster and how to integrate OAuth2 Proxy with Traefik to force visitors to authenticate to Azure AD before they are allowed access our application.
