@@ -374,3 +374,215 @@ You should be redirected to a Microsoft sign in page.
 ![https://raw.githubusercontent.com/eannaoceallaigh/www/master/assets/images/microsoft-login-page.png](https://raw.githubusercontent.com/eannaoceallaigh/www/master/assets/images/microsoft-login-page.png)
 
 Sign in and then you'll be redirected to the Hello Kubernetes application.
+
+### Ideal setup with kubernetes secrets
+
+Now we've deployed our application behind OAuth2 Proxy, it's time to make some tweaks. Traefik and Hello Kubernetes are fine as is but we can improve on OAuth2-Proxy.
+
+The main thing we can do is to convert our arguments into secrets which can then be mounted in our pod. This is better for security and it means we can safely commit our secrets to code without worrying about them being visible in plain text so we don't need a third party secret store.
+
+To accomplish this, we will use a tool from Mozilla called SOPS. You can follow [this guide](https://fluxcd.io/flux/guides/mozilla-sops/) from Flux to get set up with SOPS on your cluster.
+
+Once you've got SOPS set up on your cluster, create a kubernetes secret in a local branch of your git repo (don't commit this to GitHub):
+
+```
+apiVersion: v1
+kind: Secret
+metadata:
+    name: oauth2-proxy-values
+    namespace: default
+type: Opaque
+stringData:
+    azure-tenant: abcd1234
+    client-id: abcd1234
+    client-secret: abcd1234
+    cookie-secret: abcd1234
+    extra-jwt-issuers: abcd1234
+    oidc-issuer-url: abcd1234
+```
+
+You can save this file in your oauth2-proxy app folder and then use the sops cli command to encrypt it. Depending on whether you use age or a cloud secret store like Azure Key Vault, the command will vary slightly.
+
+With age: `sops --encrypt --age <my-age-public-key> --encrypted-regex "^(data|stringData)$" --in-place /path/to/file/oauth2-proxy-values.enc.yaml`
+Source: https://fluxcd.io/flux/guides/mozilla-sops/#encrypting-secrets-using-age
+
+With Azure Key Vault: sops --encrypt --azure-kv https://my-key-vault-name.vault.azure.net/keys/sops-key/abcdefghi123456789 --encrypted-regex "^(data|stringData)$" --in-place /path/to/file/oauth2-proxy-values.enc.yaml
+Source: https://github.com/mozilla/sops#24encrypting-using-azure-key-vault
+
+You can then safely commit the encrypted secret to GitHub because it can only be decrypted using the private key which will only be stored on your cluster, as well as locally on your computer (as with age) or in your cloud secret store (as with Azure Key Vault).
+
+You can then use volumes, volumeMounts and environment variables to pass your secrets to the OAuth2 Proxy pods.
+
+In the helm release below, we have set `proxyVarsAsSecrets` to `true` and added `extraEnv`, `extraVolumes`, `extraVolumeMounts` and `valuesFrom` attributes.
+
+The environment variables are largely the same as the arguments they replace but in upper case and with underscores instead of hyphen.
+
+More information on this can be found in the OAuth2 Proxy [docs](https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/overview#environment-variables)
+
+You could replace all of the `extraArgs` section with secrets if you wanted to but none of those remaining are sensitive values so there's not much to be gained in doing so and it could make it harder for people looking at your code to understand what's going on and see what arguments are set to what values when troubleshooting.
+
+```
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: oauth2-proxy
+  namespace: default
+  annotations:
+    flux.weave.works/automated: "false"
+spec:
+  releaseName: oauth2-proxy
+  chart:
+    spec:
+      chart: oauth2-proxy
+      version: 6.12.0
+      sourceRef:
+        kind: HelmRepository
+        name: oauth2-proxy-charts
+        namespace: default
+  interval: 5m
+  values:
+    extraArgs:
+      cookie-domain: ".domain.com"
+      email-domain: "*"
+      pass-authorization-header: true
+      pass-basic-auth: false
+      pass-host-header: true
+      pass-user-headers: true
+      provider: "azure"
+      redirect-url: https://oauth-proxy-azure.domain.com/oauth2/callback
+      reverse-proxy: true
+      set-authorization-header: true
+      set-xauthrequest: true
+      show-debug-on-error: true
+      skip-auth-route: /api
+      skip-provider-button: true
+      upstream: static://202
+      whitelist-domain: ".domain.com"
+    redis:
+      enabled: false
+    extraEnv:
+      - name: OAUTH2_PROXY_AZURE_TENANT
+        valueFrom:
+          secretKeyRef:
+            name: oauth2-proxy-values
+            key: azure-tenant
+      - name: OAUTH2_PROXY_CLIENT_ID
+        valueFrom:
+          secretKeyRef:
+            name: oauth2-proxy-values
+            key: client-id
+      - name: OAUTH2_PROXY_CLIENT_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: oauth2-proxy-values
+            key: client-secret
+      - name: OAUTH2_PROXY_COOKIE_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: oauth2-proxy-values
+            key: cookie-secret
+      - name: OAUTH2_PROXY_EXTRA_JWT_ISSUERS
+        valueFrom:
+          secretKeyRef:
+            name: oauth2-proxy-values
+            key: extra-jwt-issuers
+      - name: OAUTH2_PROXY_OIDC_ISSUER_URL
+        valueFrom:
+          secretKeyRef:
+            name: oauth2-proxy-values
+            key: oidc-issuer-url
+    extraVolumes:
+      - name: oauth2-proxy-values
+        secret:
+          secretName: oauth2-proxy-values
+    extraVolumeMounts:
+      - mountPath: "/var/oauth2"
+        name: oauth2-proxy-values
+    ingress:
+      annotations:
+        traefik.ingress.kubernetes.io/router.tls: "true"
+      className: traefik
+      enabled: true
+      hosts:
+        - oauth-proxy-azure.domain.com
+    proxyVarsAsSecrets: true
+    valuesFrom:
+      - name: "oauth2-proxy-values"
+        kind: Secret
+```
+### Extras - Redis cache
+
+So far, we have used OAuth2 Proxy to require authentication to access an application that has no authentication mechanism of its own.
+
+However, you can also use OAuth2 Proxy to perform single sign on (SSO) with applications that require authentication and support SSO because ideally you would not login to Azure AD or Google and then have to login again to your application with a local username and password.
+
+Some applications will work with the setup above as is, but some may experience errors that prevent you from signing in with SSO.
+
+In some cases, this can be because of the size of the cookies. By default, the cookie limit in OAuth2 Proxy is 4KB but some authentication provider, e.g. Azure AD, provide much larger cookies.
+
+If you're having issues using SSO with OAuth2 Proxy, you may see error messages in the pod logs telling you the cookie is too large and that it exceeds the 4KB limit.
+
+To get around this issue, you can use the bundled redis cache chart to cache these larger cookies for OAuth2 Proxy to use.
+
+To do this, simply add the required values to your helm release:
+
+```
+    redis:
+      enabled: true
+      auth:
+        enabled: true
+        existingSecret: oauth2-proxy-values
+        existingSecretPasswordKey: redis-password
+      master:
+        persistence:
+          enabled: true
+          existingClaim: oauth2-proxy-redis-master
+      replica:
+        persistence:
+          enabled: true
+          existingClaim: redis-data-oauth2-proxy-redis-replicas-0
+        replicaCount: 1
+    sessionStorage:
+      type: redis
+      redis:
+        existingSecret: oauth2-proxy-values
+        standalone:
+          connectionUrl: redis://oauth2-proxy-redis-master:6379
+```
+
+The values that are available are inherited from the upstream chart and you can view them [here](https://github.com/bitnami/charts/tree/master/bitnami/redis#parameters).
+
+In the example above, I am using an existing persistentVolume and persistentVolumeClaim that I have created separately but you can remove the `existingClaim` value to tell the chart to create its own persistentVolume and persistentVolumeClaim on the cluster. Be aware, however, that you may experience permissions errors if you have not allowed the cluster to provision storage.
+
+In the example above, I am also using a secret and environment variable to store the password for redis as detailed in [this section](https://github.com/eannaoceallaigh/www/blob/master/_posts/2023-05-22-deploy-oauth-proxy.md#ideal-setup-with-kubernetes-secrets) of this guide. You can just add another secret to the yaml file and another environment variable to the helmrelease:
+
+```
+apiVersion: v1
+kind: Secret
+metadata:
+    name: oauth2-proxy-values
+    namespace: default
+type: Opaque
+stringData:
+    azure-tenant: abcd1234
+    client-id: abcd1234
+    client-secret: abcd1234
+    cookie-secret: abcd1234
+    extra-jwt-issuers: abcd1234
+    oidc-issuer-url: abcd1234
+    redis-password: abcd1234
+```
+
+```
+extraEnv:
+  - name: OAUTH2_PROXY_REDIS_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: oauth2-proxy-values
+        key: redis-password
+```            
+### Summary
+
+In this guide, we've explored how to deploy an application to a kubernetes cluster and how to integrate OAuth2 Proxy with Traefik to force visitors to authenticate to Azure AD before they are allowed access our application.
+
+If you have any suggestions on how this guide could be improved or if you've spotted an error that needs fixing, let me know by raising a [GitHub issue](https://github.com/eannaoceallaigh/www/issues/new).
