@@ -585,4 +585,6 @@ extraEnv:
 
 In this guide, we've explored how to deploy an application to a kubernetes cluster and how to integrate OAuth2 Proxy with Traefik to force visitors to authenticate to Azure AD before they are allowed access our application.
 
+YAML files for the helm releases, ingresses and other kubernetes resources can be found in [this GitHub repo](https://github.com/eannaoceallaigh/oauth2-proxy-docs/tree/main). Feel free to fork it and get started deploying OAuth2 Proxy with Traefik on Kubernetes.
+
 If you have any suggestions on how this guide could be improved or if you've spotted an error that needs fixing, let me know by raising a [GitHub issue](https://github.com/eannaoceallaigh/www/issues/new).
