@@ -40,7 +40,7 @@ The official docs have clear guidance on setting up an application registration 
 
 For this we will be using the v1 endpoint but I have also enabled the v2 endpoint in the application manifest as per point 4 in the linked guide.
 
-### Deploying OAuth2 Proxy to Kubernetes using Helm and Flux
+### Deploying OAuth2 Proxy to Kubernetes using Flux and Helm
 
 There is an official helm chart provided by the developers of OAuth2 Proxy.
 
