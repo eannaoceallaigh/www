@@ -48,7 +48,7 @@ The source code for this can be found on [GitHub](https://github.com/oauth2-prox
 
 The following kubernetes manifests will get you up and running but there are slight improvements to be made to these configs which we will explore later on in the guide e.g. using kubernetes secrets.
 
-### Deploying the helm repository
+#### Deploying the helm repository
 
 In your git repository, add the helm repository to install the chart on the cluster:
 
@@ -69,7 +69,7 @@ spec:
 	
 </details>
 
-### Deploying the helm release
+#### Deploying the helm release
 
 Create a helm release and replace the example values like `domain.com` with your own values.
 
@@ -213,7 +213,7 @@ There are many ways to deploy and use certificates with Traefik that will depend
 
 If you're just testing this all out locally, you can set `traefik.ingress.kubernetes.io/router.tls` to false or not set it at all and remove the redirect so it only uses http, however, I have not tested this approach specifically for this guide and you may run into issues with the Azure AD application registration as it requires https redirect URIs unless you can use `http://localhost`.
 
-### Deploying the middlewares
+#### Deploying the middlewares
 
 Create the required middlewares:
 
