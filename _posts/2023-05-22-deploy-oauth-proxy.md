@@ -426,7 +426,9 @@ You should be redirected to a Microsoft sign in page.
 
 Sign in and then you'll be redirected to the Hello Kubernetes application.
 
-### Ideal setup with kubernetes secrets
+### Ideal setup 
+	
+#### Using kubernetes secrets
 
 Now we've deployed our application behind OAuth2 Proxy, it's time to make some tweaks. Traefik and Hello Kubernetes are fine as is but we can improve on OAuth2-Proxy.
 
@@ -581,7 +583,9 @@ spec:
 	
 </details>
 
-### Extras - Redis cache
+### Extras
+	
+#### Redis cache
 
 So far, we have used OAuth2 Proxy to require authentication to access an application that has no authentication mechanism of its own.
 
