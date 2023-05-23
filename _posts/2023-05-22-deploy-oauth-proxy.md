@@ -371,4 +371,6 @@ Once this is deployed, open the Hello Kubernetes application in a private browsi
 
 You should be redirected to a Microsoft sign in page.
 
+![https://raw.githubusercontent.com/eannaoceallaigh/www/master/assets/images/microsoft-login-page.png](https://raw.githubusercontent.com/eannaoceallaigh/www/master/assets/images/microsoft-login-page.png)
+
 Sign in and then you'll be redirected to the Hello Kubernetes application.
