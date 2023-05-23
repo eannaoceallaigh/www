@@ -66,7 +66,8 @@ spec:
   timeout: 3m
 {% endhighlight %}
 	
-</details><br>
+</details>
+
 ### Deploying the helm release
 
 Create a helm release and replace the example values like `domain.com` with your own values.
@@ -201,9 +202,7 @@ spec:
   interval: 5m
 {% endhighlight %}
 	
-</details>
-	
-
+</details><br>
 The annotation `traefik.ingress.kubernetes.io/router.tls: "true"` will tell Traefik to use https instead of http with a TLS certificate. You will need to configure a TLS certificate on your cluster to avoid certificate error messages in your browser from using the certificate that comes with Traefik which won't be trusted.
 
 This is coupled with `web: redirectTo: websecure` which will redirect http requests to https.
@@ -253,9 +252,7 @@ spec:
     frameDeny: true
 {% endhighlight %}
 	
-</details>
-	
-
+</details><br>
 The middlewares are used to intercept the request and send it to the OAuth2 Proxy when it detects that you are not authenticated by means of a `401 Unauthorized` http status code being returned.
 
 The forwardAuth address can be set to a fully qualified domain name but it should be noted that DNS for that URL will be required. In the example above, we are using the cluster DNS name of the kubernetes service which will always work. If you use a FQDN and the DNS changes or is unreachable, the application won't work.
@@ -323,9 +320,7 @@ spec:
       type: ClusterIP
 {% endhighlight %}
 	
-</details>
-	
-
+</details><br>
 #### Ingress
 
 <details>
@@ -353,9 +348,7 @@ spec:
                   number: 80
 {% endhighlight %}
 	
-</details>
-	
-
+</details><br>
 #### Git repository
 
 <details>
@@ -379,9 +372,7 @@ spec:
     !/deploy/helm
 {% endhighlight %}
 	
-</details>
-	
-
+</details><br>
 These manifests should deploy the Hello Kubernetes application and if you open the URL (the host line in your ingress from above) in your web browser, you should see something like this:
 
 ![https://raw.githubusercontent.com/eannaoceallaigh/www/master/assets/images/hello-kubernetes.png](https://raw.githubusercontent.com/eannaoceallaigh/www/master/assets/images/hello-kubernetes.png)
@@ -420,9 +411,7 @@ spec:
                   number: 80
 {% endhighlight %}
 	
-</details>
-	
-
+</details><br>
 Go back to your application registration in Azure AD and add a new redirect URI and set the value to `https://hello-kubernetes.domain.com/oauth2/callback`. If you don't do this, you will receive an error message at the Microsoft sign in page after signing in because it isn't allowed to redirect you to the application. Think of the redirect URIs as an allow-list of applications that the app registration is allowed to redirect to.
 
 Once this is deployed, open the Hello Kubernetes application in a private browsing window so there are no cached cookies.
@@ -464,9 +453,7 @@ stringData:
     oidc-issuer-url: abcd1234
 {% endhighlight %}
 	
-</details>
-	
-
+</details><br>
 You can save this file in your oauth2-proxy app folder and then use the sops cli command to encrypt it. Depending on whether you use age or a cloud secret store like Azure Key Vault, the command will vary slightly.
 
 With age: 
@@ -588,9 +575,7 @@ spec:
         kind: Secret
 {% endhighlight %}
 	
-</details>
-	
-	
+</details><br>	
 ### Extras - Redis cache
 
 So far, we have used OAuth2 Proxy to require authentication to access an application that has no authentication mechanism of its own.
@@ -635,7 +620,6 @@ To do this, simply add the required values to your helm release:
 {% endhighlight %}
 	
 </details>
-	
 
 The values that are available are inherited from the upstream chart and you can view them [here](https://github.com/bitnami/charts/tree/master/bitnami/redis#parameters).
 
