@@ -252,4 +252,4 @@ oauth2-proxy-59cb698789-mtmwq   1/1     Running   0          12h
 
 If you've configured your DNS, you should be able to connect to OAuth2 Proxy in a web browser. Since we've configured the upstream as `static://202`, we're greeted with a white page with the word `Authenticated` in the top left corner.
 
-![oauth2-proxy-authenticated](../assets/images/oauth2-proxy-authenticated.png)
+![oauth2-proxy-authenticated](https://github.com/eannaoceallaigh/www/blob/16307bc1e80e14fde380e8bfac6131057dbb24ad/assets/images/oauth2-proxy-authenticated.png)
