@@ -479,7 +479,7 @@ You can then use volumes, volumeMounts and environment variables to pass your se
 
 In the helm release below, we have set `proxyVarsAsSecrets` to `true` and added `extraEnv`, `extraVolumes`, `extraVolumeMounts` and `valuesFrom` attributes.
 
-The environment variables are largely the same as the arguments they replace but in upper case and with underscores instead of hyphen.
+The environment variables are largely the same as the arguments they replace but in upper case and with underscores instead of hyphens.
 
 More information on this can be found in the OAuth2 Proxy [docs](https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/overview#environment-variables)
 
