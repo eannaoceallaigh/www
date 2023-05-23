@@ -51,7 +51,10 @@ The following kubernetes manifests will get you up and running but there are sli
 
 In your git repository, add the helm repository to install the chart on the cluster:
 
-```
+<details>
+<summary>View code</summary>
+
+{% highlight yaml %}
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:
@@ -61,14 +64,17 @@ spec:
   interval: 1h
   url: https://oauth2-proxy.github.io/manifests
   timeout: 3m
-```
+{% endhighlight %}
+	
+</details>
+
 
 ### Deploying the helm release
 
 Create a helm release and replace the example values like `domain.com` with your own values.
 
 <details>
-<summary>Preview</summary>
+<summary>View code</summary>
 
 {% highlight yaml %}
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
@@ -124,6 +130,7 @@ spec:
 	
 </details>
 	
+	
 You can find explanations for what these arguments mean in the [OAuth2 Proxy docs](https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/overview) but I want to give you some pointers on why these particular arguments are useful / required.
 
 | Argument| Example value | Why is it needed? |
@@ -155,7 +162,10 @@ Redis can be deployed in instances where the cookies are too large and cause iss
 
 The chart contains an ingress controller template as per the example above. You will need to create an ingressClass by deploying Traefik using their [official helm chart](https://github.com/traefik/traefik-helm-chart/tree/master/traefik). The ingressClass will be named after your traefik helm release. If you use the file below, your ingressClass will be called `traefik`. Replace `X.X.X.X` with an appropriate IP address.
 
-```
+<details>
+<summary>View code</summary>
+
+{% highlight yaml %}
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
@@ -193,7 +203,10 @@ spec:
         name: traefik-charts
         namespace: defaults
   interval: 5m
-```
+{% endhighlight %}
+	
+</details>
+	
 
 The annotation `traefik.ingress.kubernetes.io/router.tls: "true"` will tell Traefik to use https instead of http with a TLS certificate. You will need to configure a TLS certificate on your cluster to avoid certificate error messages in your browser from using the certificate that comes with Traefik which won't be trusted.
 
@@ -206,8 +219,11 @@ If you're just testing this all out locally, you can set `traefik.ingress.kubern
 ### Deploying the middlewares
 
 Create the required middlewares:
-```
----
+
+<details>
+<summary>View code</summary>
+
+{% highlight yaml %}
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
@@ -239,7 +255,10 @@ spec:
     stsIncludeSubdomains: true
     stsPreload: true
     frameDeny: true
-```
+{% endhighlight %}
+	
+</details>
+	
 
 The middlewares are used to intercept the request and send it to the OAuth2 Proxy when it detects that you are not authenticated by means of a `401 Unauthorized` http status code being returned.
 
@@ -283,7 +302,10 @@ First, we'll deploy the application without placing it behind OAuth2 Proxy to ma
 
 #### Helm release
 
-```
+<details>
+<summary>View code</summary>
+
+{% highlight yaml %}
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
@@ -303,11 +325,17 @@ spec:
   values:
     service:
       type: ClusterIP
- ```
+{% endhighlight %}
+	
+</details>
+	
 
 #### Ingress
 
-```
+<details>
+<summary>View code</summary>
+
+{% highlight yaml %}
 kind: Ingress
 metadata:
   name: hello-kubernetes
@@ -327,11 +355,17 @@ spec:
                 name:  hello-kubernetes-hello-kubernetes
                 port:
                   number: 80
-```
+{% endhighlight %}
+	
+</details>
+	
 
 #### Git repository
 
-```
+<details>
+<summary>View code</summary>
+
+{% highlight yaml %}
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: GitRepository
 metadata:
@@ -347,7 +381,10 @@ spec:
     /*
     # include deploy dir
     !/deploy/helm
-```
+{% endhighlight %}
+	
+</details>
+	
 
 These manifests should deploy the Hello Kubernetes application and if you open the URL (the host line in your ingress from above) in your web browser, you should see something like this:
 
@@ -361,7 +398,10 @@ The annotation needs to use the full kubernetes name of the middleware which fol
 
 That gives us an ingress manifest looking like this:
 
-```
+<details>
+<summary>View code</summary>
+
+{% highlight yaml %}
 kind: Ingress
 metadata:
   name: hello-kubernetes
@@ -382,7 +422,10 @@ spec:
                 name:  hello-kubernetes-hello-kubernetes
                 port:
                   number: 80
-```
+{% endhighlight %}
+	
+</details>
+	
 
 Go back to your application registration in Azure AD and add a new redirect URI and set the value to `https://hello-kubernetes.domain.com/oauth2/callback`. If you don't do this, you will receive an error message at the Microsoft sign in page after signing in because it isn't allowed to redirect you to the application. Think of the redirect URIs as an allow-list of applications that the app registration is allowed to redirect to.
 
@@ -406,7 +449,10 @@ To accomplish this, we will use a tool from Mozilla called SOPS. You can follow 
 
 Once you've got SOPS set up on your cluster, create a kubernetes secret in a local branch of your git repo (don't commit this to GitHub):
 
-```
+<details>
+<summary>View code</summary>
+
+{% highlight yaml %}
 apiVersion: v1
 kind: Secret
 metadata:
@@ -420,7 +466,10 @@ stringData:
     cookie-secret: abcd1234
     extra-jwt-issuers: abcd1234
     oidc-issuer-url: abcd1234
-```
+{% endhighlight %}
+	
+</details>
+	
 
 You can save this file in your oauth2-proxy app folder and then use the sops cli command to encrypt it. Depending on whether you use age or a cloud secret store like Azure Key Vault, the command will vary slightly.
 
@@ -450,7 +499,10 @@ More information on this can be found in the OAuth2 Proxy [docs](https://oauth2-
 
 You could replace all of the `extraArgs` section with secrets if you wanted to but none of those remaining are sensitive values so there's not much to be gained in doing so and it could make it harder for people looking at your code to understand what's going on and see what arguments are set to what values when troubleshooting.
 
-```
+<details>
+<summary>View code</summary>
+
+{% highlight yaml %}
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
@@ -538,7 +590,11 @@ spec:
     valuesFrom:
       - name: "oauth2-proxy-values"
         kind: Secret
-```
+{% endhighlight %}
+	
+</details>
+	
+	
 ### Extras - Redis cache
 
 So far, we have used OAuth2 Proxy to require authentication to access an application that has no authentication mechanism of its own.
@@ -555,7 +611,10 @@ To get around this issue, you can use the bundled redis cache chart to cache the
 
 To do this, simply add the required values to your helm release:
 
-```
+<details>
+<summary>View code</summary>
+
+{% highlight yaml %}
     redis:
       enabled: true
       auth:
@@ -577,7 +636,10 @@ To do this, simply add the required values to your helm release:
         existingSecret: oauth2-proxy-values
         standalone:
           connectionUrl: redis://oauth2-proxy-redis-master:6379
-```
+{% endhighlight %}
+	
+</details>
+	
 
 The values that are available are inherited from the upstream chart and you can view them [here](https://github.com/bitnami/charts/tree/master/bitnami/redis#parameters).
 
@@ -585,7 +647,10 @@ In the example above, I am using an existing persistentVolume and persistentVolu
 
 In the example above, I am also using a secret and environment variable to store the password for redis as detailed in [this section](https://github.com/eannaoceallaigh/www/blob/master/_posts/2023-05-22-deploy-oauth-proxy.md#ideal-setup-with-kubernetes-secrets) of this guide. You can just add another secret to the yaml file and another environment variable to the helmrelease:
 
-```
+<details>
+<summary>View code</summary>
+
+{% highlight yaml %}
 apiVersion: v1
 kind: Secret
 metadata:
@@ -600,16 +665,26 @@ stringData:
     extra-jwt-issuers: abcd1234
     oidc-issuer-url: abcd1234
     redis-password: abcd1234
-```
+{% endhighlight %}
+	
+</details>
+	
 
-```
+<details>
+<summary>View code</summary>
+
+{% highlight yaml %}
 extraEnv:
   - name: OAUTH2_PROXY_REDIS_PASSWORD
     valueFrom:
       secretKeyRef:
         name: oauth2-proxy-values
         key: redis-password
-```            
+{% endhighlight %}
+	
+</details>
+	
+	
 ### Summary
 
 In this guide, we've explored how to deploy an application to a kubernetes cluster and how to integrate OAuth2 Proxy with Traefik to force visitors to authenticate to Azure AD before they are allowed access our application.
