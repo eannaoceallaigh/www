@@ -633,7 +633,7 @@ The values that are available are inherited from the upstream chart and you can 
 
 In the example above, I am using an existing persistentVolume and persistentVolumeClaim that I have created separately but you can remove the `existingClaim` value to tell the chart to create its own persistentVolume and persistentVolumeClaim on the cluster. Be aware, however, that you may experience permissions errors if you have not allowed the cluster to provision storage.
 
-In the example above, I am also using a secret and environment variable to store the password for redis as detailed in [this section](https://www.eannaoceallaigh.com/blog/deploy-oauth-proxy/#ideal-setup-with-kubernetes-secrets) of this guide. You can just add another secret to the yaml file and another environment variable to the helmrelease:
+In the example above, I am also using a secret and environment variable to store the password for redis as detailed in [this section](https://www.eannaoceallaigh.com/blog/deploy-oauth-proxy/#using-kubernetes-secrets) of this guide. You can just add another secret to the yaml file and another environment variable to the helmrelease:
 
 <details>
 <summary>View code</summary>
