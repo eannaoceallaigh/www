@@ -333,4 +333,42 @@ spec:
 ```
 
 These manifests should deploy the Hello Kubernetes application and if you open the URL in your web browser, you should see something like this:
+
 ![https://raw.githubusercontent.com/eannaoceallaigh/www/master/assets/images/hello-kubernetes.png](https://raw.githubusercontent.com/eannaoceallaigh/www/master/assets/images/hello-kubernetes.png)
+
+In order to force visitors to authenticate, we need to tell Traefik to send unauthenticated requests to OAuth2 Proxy. This is where our middlewares now come into play.
+
+In our ingress, we need to add an annotation that will send all requests via the OAuth2 Proxy.
+
+The annotation needs to use the full kubernetes name of the middleware which follows the format `namespace-middlewarename@kubernetescrd`. Our middlewares are called `oauth-auth` and `oauth-headers` so their full names are  `default-oauth-auth@kubernetescrd` and  `default-oauth-headers@kubernetescrd`.
+
+That gives us an ingress manifest looking like this:
+
+```
+kind: Ingress
+metadata:
+  name: hello-kubernetes
+  namespace: default
+  annotations:
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    traefik.ingress.kubernetes.io/router.middlewares: default-oauth-headers@kubernetescrd,default-oauth-auth@kubernetescrd
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: hello-kubernetes.domain.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name:  hello-kubernetes-hello-kubernetes
+                port:
+                  number: 80
+```
+
+Once this is deployed, open the Hello Kubernetes application in a private browsing window so there are no cached cookies.
+
+You should be redirected to a Microsoft sign in page.
+
+Sign in and then you'll be redirected to the Hello Kubernetes application.
