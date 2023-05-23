@@ -135,7 +135,7 @@ You can find explanations for what these arguments mean in the [OAuth2 Proxy doc
 | pass-host-header | true | Pass the request Host Header to upstream |
 | pass-user-headers | true | Pass X-Forwarded-User, X-Forwarded-Groups, X-Forwarded-Email and X-Forwarded-Preferred-Username information to upstream |
 | provider | "azure" | The authentication provider you want to use e.g. `google` for Google or `azure` for Azure AD |
-| redirect-url | https://oauth2-proxy-01.domain.com/oauth2/callback | The redirect URL for OAuth2 Proxy. Tells your request where to go once authenticated |
+| redirect-url | https://oauth2-proxy-01.domain.com/oauth2/callback | The redirect URL for OAuth2 Proxy. Tells your request where to go once authenticated. You will have to enter this in the `Redirect URIs` section of your app registration in Azure AD |
 | reverse-proxy | true | Tells OAuth2 Proxy that it's running behind a reverse proxy i.e. Traefik |
 | set-authorization-header | true | Set Authorization Bearer response header (useful in Nginx auth_request mode) |
 | set-xauthrequest | true | Set X-Auth-Request-User, X-Auth-Request-Groups, X-Auth-Request-Email and X-Auth-Request-Preferred-Username response headers (useful in Nginx auth_request mode). When used with --pass-access-token, X-Auth-Request-Access-Token is added to response headers. |
@@ -377,6 +377,8 @@ spec:
                 port:
                   number: 80
 ```
+
+Go back to your application registration in Azure AD and add a new redirect URI and set the value to `https://hello-kubernetes.domain.com/oauth2/callback`. If you don't do this, you will receive an error message at the Microsoft sign in page after signing in because it isn't allowed to redirect you to the application. Think of the redirect URIs as an allow-list of applications that the app registration is allowed to redirect to.
 
 Once this is deployed, open the Hello Kubernetes application in a private browsing window so there are no cached cookies.
 
