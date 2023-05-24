@@ -205,7 +205,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: traefik-charts
-        namespace: defaults
+        namespace: default
   interval: 5m
 {% endhighlight %}
 	
@@ -247,6 +247,7 @@ apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
   name: oauth-headers
+  namespace: default
 spec:
   headers:
     sslRedirect: true
