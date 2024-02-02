@@ -31,7 +31,7 @@ Microsoft has some [documentation](https://learn.microsoft.com/en-us/azure/priva
 
 However, this documentation isn't very explicit on whether you need to peer networks or have some other means of connecting them directly. 
 
-It has this bullet point:
+Below is what the docs have to say on the matter.
 
 Private endpoints enable connectivity between the customers from the same:
 
@@ -51,7 +51,7 @@ There is an [official guide](https://learn.microsoft.com/en-us/azure/architectur
 
 TL;DR yes.
 
-But how do you know? How else, test it yourself!
+But how do you know? Test it yourself!
 
 I have two tenants of my own and I created a [GitHub repo](https://github.com/eannaoceallaigh/azure-cross-tenant-storage) with some terraform code to deploy a VM and associated networking resources in one tenant and a storage account in another.
 
@@ -61,7 +61,9 @@ If you are doing this manually, via the portal, and you have permission to acces
 
 If you don't have permission to access the customer tenant, the resource ID of the storage account will still work.
 
-Another thing to note is, if you don't have permission to the customer tenant, you will need someone who does to approve the connection. 
+Another thing to note is, if you don't have permission to the customer tenant, you will need someone who does to approve the connection.
+
+![https://raw.githubusercontent.com/eannaoceallaigh/www/master/assets/images/storage-account-private-endpoints.png](https://raw.githubusercontent.com/eannaoceallaigh/www/master/assets/images/storage-account-private-endpoints.png)
 
 When using terraform, there is an option to automatically approve private endpoint connections using the `is_manual_connection` attribute and setting it to `false`, but if the account you're running terraform with doesn't have permission to access the customer tenant, you can set this value to `true`.
 
