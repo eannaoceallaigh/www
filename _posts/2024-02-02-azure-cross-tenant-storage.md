@@ -69,7 +69,7 @@ The key part of all this, one that is easy to miss in some of the Microsoft docu
 
 For accessing blob storage, the private DNS zone will be named `privatelink.blob.core.windows.net`. It will be different if you're connecting to a file share or another azure resource.
 
-![https://github.com/eannaoceallaigh/www/blob/16307bc1e80e14fde380e8bfac6131057dbb24ad/assets/images/create-private-endpoint.png](https://raw.githubusercontent.com/eannaoceallaigh/www/16307bc1e80e14fde380e8bfac6131057dbb24ad/assets/images/create-private-endpoint.png)
+![https://github.com/eannaoceallaigh/www/master/assets/images/create-private-endpoint.png](https://raw.githubusercontent.com/eannaoceallaigh/www/master/assets/images/create-private-endpoint.png)
 
 ### Great! What do I need to do?
 
@@ -91,6 +91,6 @@ curl https://tenant022024sa.privatelink.blob.core.windows.net
 
 And my terminal returned the contents of the file.
 
-![https://github.com/eannaoceallaigh/www/blob/master/assets/images/file-in-storage-account.png](https://github.com/eannaoceallaigh/www/blob/master/assets/images/file-in-storage-account.png)
+![https://raw.githubusercontent.com/eannaoceallaigh/www/master/assets/images/file-in-storage-account.png](https://raw.githubusercontent.com/eannaoceallaigh/www/master/assets/images/file-in-storage-account.png)
 
 ![https://raw.githubusercontent.com/eannaoceallaigh/www/master/assets/images/ssh-to-azure-vm.png](https://raw.githubusercontent.com/eannaoceallaigh/www/master/assets/images/ssh-to-azure-vm.png)
