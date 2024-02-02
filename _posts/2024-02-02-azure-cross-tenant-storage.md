@@ -35,6 +35,8 @@ Microsoft has some [documentation](https://learn.microsoft.com/en-us/azure/priva
 
 However, this documentation isn't very explicit on whether you need to peer networks or have some other means of connecting them directly. 
 
+It's also not explicitly clear on whether it matters that it's in another tenant.
+
 Below is what the docs have to say on the matter.
 
 Private endpoints enable connectivity between the customers from the same:
