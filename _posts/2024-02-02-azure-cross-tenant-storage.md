@@ -27,6 +27,10 @@ When you connect to resource hosted in Azure from a resource hosted in Azure, by
 
 So the traffic hitting the storage account wasn't coming from the internet, it was coming from Microsoft's backbone, even though it was in another tenant - though it was in the same region.
 
+## So how do we fix that?
+
+Using private endpoints.
+
 Microsoft has some [documentation](https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-overview) that details what private endpoints are and how they can be used.
 
 However, this documentation isn't very explicit on whether you need to peer networks or have some other means of connecting them directly. 
