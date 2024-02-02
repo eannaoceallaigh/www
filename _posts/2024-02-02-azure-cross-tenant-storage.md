@@ -85,7 +85,7 @@ For accessing blob storage, the private DNS zone will be named `privatelink.blob
 
 If you're managing your storage account via the Azure portal, go to `Networking` and then click on `Private endpoint connections` and then click `Create`.
 
-If you're using terraform, you can create a private endpoint resource in code using the [azurerm_private_endpoint](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint) resource.
+If you're using terraform, you can create a private endpoint in code using the [azurerm_private_endpoint](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint) resource.
 
 ### How can I confirm it's working?
 
