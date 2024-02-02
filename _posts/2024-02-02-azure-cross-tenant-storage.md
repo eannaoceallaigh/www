@@ -75,7 +75,11 @@ When using terraform, there is an option to automatically approve private endpoi
 
 The key part of all this, one that is easy to miss in some of the Microsoft documentation, is to ensure the virtual network is associated with the private DNS zone that gets created when you first create a private link. You can do everything else correctly but without the private DNS zone being linked to your virtual network, your VM won't be able to connect. 
 
+![https://github.com/eannaoceallaigh/www/master/assets/images/dns-vnet-links.png](https://raw.githubusercontent.com/eannaoceallaigh/www/master/assets/images/dns-vnet-links.png)
+
 For accessing blob storage, the private DNS zone will be named `privatelink.blob.core.windows.net`. It will be different if you're connecting to a file share or another azure resource.
+
+![https://github.com/eannaoceallaigh/www/master/assets/images/dns-records.png](https://raw.githubusercontent.com/eannaoceallaigh/www/master/assets/images/dns-records.png)
 
 ### Great! What do I need to do?
 
