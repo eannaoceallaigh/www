@@ -27,13 +27,12 @@ When you connect to resource hosted in Azure from a resource hosted in Azure, by
 
 So the traffic hitting the storage account wasn't coming from the internet, it was coming from Microsoft's backbone, even though it was in another tenant - though it was in the same region.
 
-Microsoft has some documentation that details what private endpoints are and how they can be used: https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-overview
+Microsoft has some [documentation](https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-overview) that details what private endpoints are and how they can be used.
 
 However, this documentation isn't very explicit on whether you need to peer networks or have some other means of connecting them directly. 
 
 It has this bullet point:
 
-```
 Private endpoints enable connectivity between the customers from the same:
 
 - Virtual network
@@ -41,13 +40,12 @@ Private endpoints enable connectivity between the customers from the same:
 - Globally peered virtual networks
 - On-premises environments that use VPN or Express Route
 - Services that are powered by Private Link
-```
 
 This might lead you to think that the virtual network your VM is in has to be peered with a virtual network in the customer tenant.
 
 This perception isn't helped by the [troubleshooting document](https://learn.microsoft.com/en-us/azure/private-link/troubleshoot-private-endpoint-connectivity) which has similar bullet points.
 
-There is an [official guide](https://learn.microsoft.com/en-us/azure/architecture/guide/networking/cross-tenant-secure-access-private-endpoints) on how to use private endpoints to access web apps from a VM in another tenant.
+There is an [official guide](https://learn.microsoft.com/en-us/azure/architecture/guide/networking/cross-tenant-secure-access-private-endpoints) on how to use private endpoints to access web apps from a VM in another tenant so...
 
 ### Surely the same is true for storage right?
 
@@ -59,7 +57,7 @@ I have two tenants of my own and I created a [GitHub repo](https://github.com/ea
 
 I deployed a private endpoint in the first tenant alongside the virtual machine and pointed it to the resource ID of the storage account.
 
-If you are doing this manually, via the portal, and you have permission to access the customer tenant, you can then choose the storage account from the dropdowns.
+If you are doing this manually, via the portal, and you have permission to access the customer tenant, you can choose the storage account from the dropdowns.
 
 If you don't have permission to access the customer tenant, the resource ID of the storage account will still work.
 
@@ -93,6 +91,6 @@ curl https://tenant022024sa.privatelink.blob.core.windows.net
 
 And my terminal returned the contents of the file.
 
-![https://github.com/eannaoceallaigh/www/blob/16307bc1e80e14fde380e8bfac6131057dbb24ad/assets/images/file-in-storage-account.png](https://raw.githubusercontent.com/eannaoceallaigh/www/16307bc1e80e14fde380e8bfac6131057dbb24ad/assets/images/file-in-storage-account.png)
+![https://github.com/eannaoceallaigh/www/blob/master/assets/images/file-in-storage-account.png](https://github.com/eannaoceallaigh/www/blob/master/assets/images/file-in-storage-account.png)
 
-![https://github.com/eannaoceallaigh/www/blob/16307bc1e80e14fde380e8bfac6131057dbb24ad/assets/images/ssh-to-azure-vm.png](https://raw.githubusercontent.com/eannaoceallaigh/www/16307bc1e80e14fde380e8bfac6131057dbb24ad/assets/images/ssh-to-azure-vm.png)
+![https://github.com/eannaoceallaigh/www/blob/master/assets/images/ssh-to-azure-vm.png](https://github.com/eannaoceallaigh/www/blob/master/assets/images/ssh-to-azure-vm.png)
