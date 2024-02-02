@@ -49,7 +49,7 @@ This might lead you to think that the virtual network your VM is in has to be pe
 
 This perception isn't helped by the [troubleshooting document](https://learn.microsoft.com/en-us/azure/private-link/troubleshoot-private-endpoint-connectivity) which has similar bullet points.
 
-There is an [official guide](https://learn.microsoft.com/en-us/azure/architecture/guide/networking/cross-tenant-secure-access-private-endpoints) on how to use private endpoints to access web apps from a VM in another tenant so...
+There is an [official guide](https://learn.microsoft.com/en-us/azure/architecture/guide/networking/cross-tenant-secure-access-private-endpoints) on how to use private endpoints to access web apps from a VM in another tenant that doesn't mention peering so...
 
 ### Surely the same is true for storage right?
 
