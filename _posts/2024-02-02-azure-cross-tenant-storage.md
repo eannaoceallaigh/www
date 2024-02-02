@@ -11,7 +11,7 @@ tags:
 classes: wide
 ---
 
-I recently was helping someone troubleshoot an issue they were trying to fix for some of their users.
+I recently was helping someone troubleshoot an issue some of their users were experiencing.
 
 They have client laptops attempting to connect to an Azure storage account that exists in a customer tenant. The storage account is using IP allow-listing to prevent unauthorised IP addresses from being able to connect to the storage account.
 
