@@ -93,4 +93,4 @@ And my terminal returned the contents of the file.
 
 ![https://github.com/eannaoceallaigh/www/blob/master/assets/images/file-in-storage-account.png](https://github.com/eannaoceallaigh/www/blob/master/assets/images/file-in-storage-account.png)
 
-![https://github.com/eannaoceallaigh/www/blob/master/assets/images/ssh-to-azure-vm.png](https://github.com/eannaoceallaigh/www/blob/master/assets/images/ssh-to-azure-vm.png)
+![https://raw.githubusercontent.com/eannaoceallaigh/www/master/assets/images/ssh-to-azure-vm.png](https://raw.githubusercontent.com/eannaoceallaigh/www/master/assets/images/ssh-to-azure-vm.png)
