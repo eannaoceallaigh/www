@@ -53,7 +53,7 @@ There is an [official guide](https://learn.microsoft.com/en-us/azure/architectur
 
 ### Surely the same is true for storage right?
 
-TL;DR yes.
+Yes.
 
 But how do you know? Test it yourself!
 
