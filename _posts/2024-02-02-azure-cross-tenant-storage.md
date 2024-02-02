@@ -87,9 +87,7 @@ For the purposes of testing this all out, I allowed anonymous access to the cont
 
 I placed a simple text file in the storage account and ran curl against the private DNS record.
 
-```
-curl https://tenant022024sa.privatelink.blob.core.windows.net
-```
+`curl https://tenant022024sa.privatelink.blob.core.windows.net`
 
 And my terminal returned the contents of the file.
 
