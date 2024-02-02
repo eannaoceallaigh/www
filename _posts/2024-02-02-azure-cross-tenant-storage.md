@@ -9,7 +9,6 @@ tags:
   - networking
   - storage
 classes: wide
-toc: true
 ---
 
 I recently was helping someone troubleshoot an issue some of their users were experiencing.
