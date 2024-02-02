@@ -61,6 +61,8 @@ If you are doing this manually, via the portal, and you have permission to acces
 
 If you don't have permission to access the customer tenant, the resource ID of the storage account will still work.
 
+![https://github.com/eannaoceallaigh/www/master/assets/images/create-private-endpoint.png](https://raw.githubusercontent.com/eannaoceallaigh/www/master/assets/images/create-private-endpoint.png)
+
 Another thing to note is, if you don't have permission to the customer tenant, you will need someone who does to approve the connection.
 
 ![https://raw.githubusercontent.com/eannaoceallaigh/www/master/assets/images/storage-account-private-endpoints.png](https://raw.githubusercontent.com/eannaoceallaigh/www/master/assets/images/storage-account-private-endpoints.png)
@@ -70,8 +72,6 @@ When using terraform, there is an option to automatically approve private endpoi
 The key part of all this, one that is easy to miss in some of the Microsoft documentation, is to ensure the virtual network is associated with the private DNS zone that gets created when you first create a private link. You can do everything else correctly but without the private DNS zone being linked to your virtual network, your VM won't be able to connect. 
 
 For accessing blob storage, the private DNS zone will be named `privatelink.blob.core.windows.net`. It will be different if you're connecting to a file share or another azure resource.
-
-![https://github.com/eannaoceallaigh/www/master/assets/images/create-private-endpoint.png](https://raw.githubusercontent.com/eannaoceallaigh/www/master/assets/images/create-private-endpoint.png)
 
 ### Great! What do I need to do?
 
@@ -83,7 +83,7 @@ If you're using terraform, you can create a private endpoint resource in code us
 
 From your VM, try to access a file in the storage account. If you can access a file, then everything is working.
 
-For the purposes of testing this all out, I allowed anonymous access to the containers on the storage account I was testing with. 
+For the purposes of testing this all out, I allowed anonymous access to the containers on the storage account I was testing with. **Do not allow anonymous access on a storage account unless you explicitly need to e.g. hosting files for anyone to download**
 
 I placed a simple text file in the storage account and ran curl against the private DNS record.
 
