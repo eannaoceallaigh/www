@@ -1,14 +1,33 @@
 ---
 layout: post
-title: "Deploying OAuth2 Proxy with the Azure Active Directory provider and Traefik reverse proxy"
+title: "Deploy OAuth2 Proxy on Kubernetes with Azure AD"
+subtitle: Using Traefik reverse proxy via Flux and Helm
 date: 2023-05-22T20:30:00+01:00
+background: '/assets/images/oauth2-proxy.png'
 ---
 
 <div id="toc_container">
     <p class="toc_title">Contents</p>
     <ul class="toc_list">
       <li><a href="#What_is_oauth_proxy">What is Oauth2 Proxy?</a></li>
-      <li><a href="#k8s_secrets">this section</a></li>
+      <li><a href="#Setup_for_azure_ad">Setup for Azure AD</a></li>
+      <li><a href="#k8s_with_flux_helm">Deploying OAuth2 Proxy to Kubernetes using Flux and Helm</a></li>
+      <ol><a href="#Deploying_helm_repo">Deploying the helm repository</a></ol>
+      <ol><a href="#Deploying_helm_release">Deploying the helm release</a></ol>
+      <ol><a href="#Config_options">Configuration options</a></ol>
+      <ol><a href="#Deploying_ingress">Deploying the ingress</a></ol>
+      <ol><a href="#Deploying_middleware">Deploying the middlewares</a></ol>
+      <li><a href="#Checking_progress">Checking progress</a></li>
+      <li><a href="#Deploying_application">Deploying an application behind OAuth2 Proxy</a></li>
+      <ol><a href="#Deploying_git_repo">Deploying the git repository</a></ol>
+      <ol><a href="#Deploying_helm_release_2">Deploying the helm release</a></ol>
+      <ol><a href="#Deploying_ingress_2">Deploying the ingress</a></ol>
+      <li><a href="#Ideal_setup">Ideal setup</a></li>
+      <ol><a href="#k8s_secrets">Using kubernetes secrets</a></ol>
+      <li><a href="#Extras">Extras</a></li>
+      <ol><a href="#Redis_cache">Redis cache</a></ol>
+      <li><a href="#Summary">Summary</a></li>
+
     </ul>
 </div>
 
@@ -534,7 +553,7 @@ oauth2-proxy-59cb698789-mtmwq   1/1     Running   0          12h
 </p>
 <p>If you've configured your DNS, you should be able to connect to OAuth2 Proxy in a web browser. Since we've configured the upstream as <code>static://202</code>, we're greeted with a white page with the word <code>Authenticated</code> in the top left corner.
 </p>
-<p>![https://github.com/eannaoceallaigh/www/blob/16307bc1e80e14fde380e8bfac6131057dbb24ad/assets/images/oauth2-proxy-authenticated.png](https://raw.githubusercontent.com/eannaoceallaigh/www/16307bc1e80e14fde380e8bfac6131057dbb24ad/assets/images/oauth2-proxy-authenticated.png)
+<img src="../../../assets/images/oauth2-proxy-authenticated.png" alt="Blank authenticated page">
 </p>
 <h1 id="Deploying_app">Deploying an application behind OAuth2 Proxy</h1>
 </p>
@@ -695,8 +714,8 @@ spec:
 </p>
 <p>These manifests should deploy the Hello Kubernetes application and if you open the URL (the host line in your ingress from above) in your web browser, you should see something like this:
 </p>
-<p>![https://raw.githubusercontent.com/eannaoceallaigh/www/master/assets/images/hello-kubernetes.png](https://raw.githubusercontent.com/eannaoceallaigh/www/master/assets/images/hello-kubernetes.png)
-</p>
+<img src="../../../assets/images/hello-kubernetes.png" alt="Hello Kubernetes">
+
 <p>In order to force visitors to authenticate, we need to tell Traefik to send unauthenticated requests to OAuth2 Proxy. This is where our middlewares now come into play.
 </p>
 <p>In our ingress, we need to add an annotation that will send all requests via the OAuth2 Proxy.
@@ -762,8 +781,8 @@ spec:
 </p>
 <p>You should be redirected to a Microsoft sign in page.
 </p>
-<p>![https://raw.githubusercontent.com/eannaoceallaigh/www/master/assets/images/microsoft-login-page.png](https://raw.githubusercontent.com/eannaoceallaigh/www/master/assets/images/microsoft-login-page.png)
-</p>
+<img src="../../../assets/images/microsoft-login-page.png" alt="Microsoft login page">
+
 <p>Sign in and then you'll be redirected to the Hello Kubernetes application.
 </p>
 <h1 id="Ideal_setup">Ideal setup 
