@@ -1,32 +1,11 @@
 ---
 layout: post
-title: "Deploy OAuth2 Proxy on Kubernetes with Azure AD 2"
+title: "Deploy OAuth2 Proxy on Kubernetes with Azure AD"
 subtitle: Using Traefik reverse proxy via Flux and Helm
 date: 2023-05-22T20:30:00+01:00
 background: '/assets/images/oauth2-proxy.png'
+toc: true
 ---
-
-- [What is Oauth2 Proxy?](#what-is-oauth2-proxy)
-- [Setup for Azure AD](#setup-for-azure-ad)
-- [Deploying OAuth2 Proxy to Kubernetes using Flux and Helm](#deploying-with-flux-and-helm)
-  - [Deploying the helm repository](#deploying-helm-repo)
-  - [Deploying the helm release](#deploying-helm-release)
-  - [Configuration options](#configuration-options)
-  - [Deploying the ingress](#deploying-ingress)
-  - [Deploying the middlewares](#deploying-middlewares)
-- [Checking progress](#checking-progress)
-- [Deploying an application behind OAuth2 Proxy](#deploying-application)
-  - [Deploying the git repository](#deploying-git-repo)
-  - [Deploying the helm release](#deploying-helm-release-2)
-  - [Deploying the ingress](#deploying-ingress-2)
-- [Ideal setup](#ideal-setup)
-  - [Using kubernetes secrets](#using-kubernetes-secrets)
-- [Extras](#extras)
-  - [Redis cache](#redis-cache)
-- [Summary](#summary)
-
-* TOC
-{:toc}
 
 In this tutorial, we will be deploying OAuth2 Proxy to a kubernetes cluster using Azure Active Directory as the authentication provider and Traefik as the reverse proxy.
 
@@ -43,19 +22,19 @@ Requirements:
 
 You can also deploy the helm releases we will be using manually by running `kubectl apply -f helmrelease.yaml` if you don't want to set up Flux. You can also avoid having to use TLS certificates if you're just testing this out locally but the guide will assume you are using all of the above.
 
-# What is Oauth2 Proxy? <a name="what-is-oauth2-proxy"></a>
+# What is Oauth2 Proxy?
 
 If you have an application you want to make available on the internet but you want to grant access only to authorised users, you can use OAuth2 Proxy to force visitors to authenticate with an authentication provider like Google or Microsoft.
 
 The tool is mainly focused on using NGINX reverse proxy so much of the official documentation is around that technology. This guide will give you guidance on how to use OAuth2 Proxy with Traefik reverse proxy which requires some specific setup to work.
 
-# Setup for Azure AD <a name="set-up-for-azure-ad"></a>
+# Setup for Azure AD
 
 The official docs have clear guidance on setting up an application registration in Azure Active Directory. Follow their [guide](https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/oauth_provider#azure-auth-provider) for this step and come back here once you've completed that.
 
 For this we will be using the v1 endpoint but I have also enabled the v2 endpoint in the application manifest as per point 4 in the linked guide.
 
-# Deploying OAuth2 Proxy to Kubernetes using Flux and Helm <a name="deploying-with-flux-and-helm"></a>
+# Deploying OAuth2 Proxy to Kubernetes using Flux and Helm
 
 There is an official helm chart provided by the developers of OAuth2 Proxy.
 
@@ -63,7 +42,7 @@ The source code for this can be found on [GitHub](https://github.com/oauth2-prox
 
 The following kubernetes manifests will get you up and running but there are slight improvements to be made to these configs which we will explore later on in the guide e.g. using kubernetes secrets.
 
-## Deploying the helm repository <a name="deploying-helm-repo"></a>
+## Deploying the helm repository
 
 In your git repository, add the helm repository to install the chart on the cluster:
 
@@ -85,7 +64,7 @@ spec:
 </details>
 <p></p>
 
-## Deploying the helm release <a name="deploying-helm-release"></a>
+## Deploying the helm release
 
 Create a helm release and replace the example values like `domain.com` with your own values.
 
@@ -146,6 +125,7 @@ spec:
 	
 </details>
 <p></p>
+
 ### Configuration options
 
 You can find explanations for what these options mean in the [OAuth2 Proxy docs](https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/overview) but I want to give you some pointers on why these particular arguments are useful / required.
@@ -178,7 +158,7 @@ You can find explanations for what these options mean in the [OAuth2 Proxy docs]
 	
 Redis can be deployed in instances where the cookies are too large and cause issues with authenticating to your application. This can be the case in some applications that support Single Sign On (SSO). Our ideal setup will have redis enabled and we will come back to this later.
 
-## Deploying the ingress <a name="deploying-ingress"></a>
+## Deploying the ingress
 
 The chart contains an ingress controller template as per the example above. You will need to create an ingressClass by deploying Traefik using their [official helm chart](https://github.com/traefik/traefik-helm-chart/tree/master/traefik). The ingressClass will be named after your traefik helm release. If you use the file below, your ingressClass will be called `traefik`. Replace `X.X.X.X` with an appropriate IP address.
 
@@ -234,7 +214,7 @@ There are many ways to deploy and use certificates with Traefik that will depend
 
 If you're just testing this all out locally, you can set `traefik.ingress.kubernetes.io/router.tls` to false or not set it at all and remove the redirect so it only uses http, however, I have not tested this approach specifically for this guide and you may run into issues with the Azure AD application registration as it requires https redirect URIs unless you can use `http://localhost`.
 
-## Deploying the middlewares <a name="deploying-middlewares"></a>
+## Deploying the middlewares
 
 Create the required middlewares:
 
@@ -287,7 +267,7 @@ The official docs have an [example](https://oauth2-proxy.github.io/oauth2-proxy/
 
 See also: [https://github.com/oauth2-proxy/oauth2-proxy/issues/46](https://github.com/oauth2-proxy/oauth2-proxy/issues/46)
 
-# Checking progress <a name="checking-progress"></a>
+# Checking progress
 
 Once you commmitted these files to your repo and flux has synced the changes with your cluster, you should see the helm release successfully deployed by running `kubectl get helmrelease`:
 
@@ -307,7 +287,7 @@ If you've configured your DNS, you should be able to connect to OAuth2 Proxy in 
 
 <img src="../../../assets/images/oauth2-proxy-authenticated.png" alt="Blank authenticated page">
 
-# Deploying an application behind OAuth2 Proxy <a name="deploying-application"></a>
+# Deploying an application behind OAuth2 Proxy
 
 To see OAuth2 Proxy providing authentication to another application, we first need to deploy one with an ingress using Traefik.
 
@@ -317,7 +297,7 @@ Similar to what we've done with Traefik and OAuth2 Proxy, we need a helm release
 
 First, we'll deploy the application without placing it behind OAuth2 Proxy to make sure it's reachable.
 	
-## Deploying the git repository <a name="deploying-git-repo"></a>
+## Deploying the git repository
 <p></p>
 
 <details>
@@ -344,7 +324,7 @@ spec:
 </details>
 <p></p>
 
-## Deploying the helm release <a name="deploying-helm-release-2"></a>
+## Deploying the helm release
 <p></p>
 
 <details>
@@ -375,7 +355,7 @@ spec:
 </details>
 <p></p>
 
-## Deploying the ingress <a name="deploying-ingress-2"></a>
+## Deploying the ingress
 <p></p>
 
 <details>
@@ -453,10 +433,10 @@ You should be redirected to a Microsoft sign in page.
 
 Sign in and then you'll be redirected to the Hello Kubernetes application.
 
-# Ideal setup  <a name="ideal-setup"></a>
+# Ideal setup
 <p></p>
 
-## Using kubernetes secrets <a name="using-kubernetes-secrets"></a>
+## Using kubernetes secrets
 
 Now we've deployed our application behind OAuth2 Proxy, it's time to make some tweaks. Traefik and Hello Kubernetes are fine as is but we can improve on OAuth2-Proxy.
 
@@ -612,10 +592,10 @@ spec:
 </details>
 <p></p>
 
-# Extras <a name="extras"></a>
+# Extras
 <p></p>
 	
-## Redis cache <a name="redis-cache"></a>
+## Redis cache
 
 So far, we have used OAuth2 Proxy to require authentication to access an application that has no authentication mechanism of its own.
 
@@ -701,7 +681,7 @@ extraEnv:
 </details>
 <p></p>
 
-# Summary <a name="summary"></a>
+# Summary
 
 In this guide, we've explored how to deploy an application to a kubernetes cluster and how to integrate OAuth2 Proxy with Traefik to force visitors to authenticate to Azure AD before they are allowed access our application.
 
