@@ -1,15 +1,9 @@
 ---
-title: "Deploying OAuth2 Proxy with the Azure Active Directory provider and Traefik reverse proxy"
+layout: post
+title: "Deploy OAuth2 Proxy on Kubernetes with Azure AD"
+subtitle: Using Traefik reverse proxy via Flux and Helm
 date: 2023-05-22T20:30:00+01:00
-categories:
-  - blog
-tags:
-  - oauth2-proxy
-  - traefik
-  - kubernetes
-  - helm
-  - azure
-classes: wide
+background: '/assets/images/oauth2-proxy.png'
 toc: true
 ---
 
@@ -34,7 +28,7 @@ If you have an application you want to make available on the internet but you wa
 
 The tool is mainly focused on using NGINX reverse proxy so much of the official documentation is around that technology. This guide will give you guidance on how to use OAuth2 Proxy with Traefik reverse proxy which requires some specific setup to work.
 
-# Set up for Azure AD
+# Setup for Azure AD
 
 The official docs have clear guidance on setting up an application registration in Azure Active Directory. Follow their [guide](https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/oauth_provider#azure-auth-provider) for this step and come back here once you've completed that.
 
@@ -68,6 +62,7 @@ spec:
 {% endhighlight %}
 	
 </details>
+<p></p>
 
 ## Deploying the helm release
 
@@ -129,7 +124,8 @@ spec:
 {% endhighlight %}
 	
 </details>
-	
+<p></p>
+
 ### Configuration options
 
 You can find explanations for what these options mean in the [OAuth2 Proxy docs](https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/overview) but I want to give you some pointers on why these particular arguments are useful / required.
@@ -208,7 +204,7 @@ spec:
         namespace: default
   interval: 5m
 {% endhighlight %}
-	
+
 </details><br>
 The annotation `traefik.ingress.kubernetes.io/router.tls: "true"` will tell Traefik to use https instead of http with a TLS certificate. You will need to configure a TLS certificate on your cluster to avoid certificate error messages in your browser from using the certificate that comes with Traefik which won't be trusted.
 
@@ -289,7 +285,7 @@ oauth2-proxy-59cb698789-mtmwq   1/1     Running   0          12h
 
 If you've configured your DNS, you should be able to connect to OAuth2 Proxy in a web browser. Since we've configured the upstream as `static://202`, we're greeted with a white page with the word `Authenticated` in the top left corner.
 
-![https://github.com/eannaoceallaigh/www/blob/16307bc1e80e14fde380e8bfac6131057dbb24ad/assets/images/oauth2-proxy-authenticated.png](https://raw.githubusercontent.com/eannaoceallaigh/www/16307bc1e80e14fde380e8bfac6131057dbb24ad/assets/images/oauth2-proxy-authenticated.png)
+<img src="../../../assets/images/oauth2-proxy-authenticated.png" alt="Blank authenticated page">
 
 # Deploying an application behind OAuth2 Proxy
 
@@ -302,6 +298,7 @@ Similar to what we've done with Traefik and OAuth2 Proxy, we need a helm release
 First, we'll deploy the application without placing it behind OAuth2 Proxy to make sure it's reachable.
 	
 ## Deploying the git repository
+<p></p>
 
 <details>
 <summary>View code</summary>
@@ -325,8 +322,10 @@ spec:
 {% endhighlight %}
 	
 </details>
+<p></p>
 
 ## Deploying the helm release
+<p></p>
 
 <details>
 <summary>View code</summary>
@@ -354,8 +353,10 @@ spec:
 {% endhighlight %}
 	
 </details>
+<p></p>
 
 ## Deploying the ingress
+<p></p>
 
 <details>
 <summary>View code</summary>
@@ -385,7 +386,7 @@ spec:
 </details><br>
 These manifests should deploy the Hello Kubernetes application and if you open the URL (the host line in your ingress from above) in your web browser, you should see something like this:
 
-![https://raw.githubusercontent.com/eannaoceallaigh/www/master/assets/images/hello-kubernetes.png](https://raw.githubusercontent.com/eannaoceallaigh/www/master/assets/images/hello-kubernetes.png)
+<img src="../../../assets/images/hello-kubernetes.png" alt="Hello Kubernetes">
 
 In order to force visitors to authenticate, we need to tell Traefik to send unauthenticated requests to OAuth2 Proxy. This is where our middlewares now come into play.
 
@@ -428,12 +429,13 @@ Once this is deployed, open the Hello Kubernetes application in a private browsi
 
 You should be redirected to a Microsoft sign in page.
 
-![https://raw.githubusercontent.com/eannaoceallaigh/www/master/assets/images/microsoft-login-page.png](https://raw.githubusercontent.com/eannaoceallaigh/www/master/assets/images/microsoft-login-page.png)
+<img src="../../../assets/images/microsoft-login-page.png" alt="Microsoft login page">
 
 Sign in and then you'll be redirected to the Hello Kubernetes application.
 
-# Ideal setup 
-	
+# Ideal setup
+<p></p>
+
 ## Using kubernetes secrets
 
 Now we've deployed our application behind OAuth2 Proxy, it's time to make some tweaks. Traefik and Hello Kubernetes are fine as is but we can improve on OAuth2-Proxy.
@@ -588,8 +590,10 @@ spec:
 {% endhighlight %}
 	
 </details>
+<p></p>
 
 # Extras
+<p></p>
 	
 ## Redis cache
 
@@ -675,6 +679,7 @@ extraEnv:
 {% endhighlight %}
 	
 </details>
+<p></p>
 
 # Summary
 

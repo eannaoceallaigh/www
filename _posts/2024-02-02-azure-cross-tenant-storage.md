@@ -1,14 +1,9 @@
 ---
+layout: post
 title: "Accessing Azure storage accounts in another tenant using private endpoints"
 date: 2024-02-02T20:30:00+01:00
-categories:
-  - blog
-tags:
-  - azure
-  - private endpoints
-  - networking
-  - storage
-classes: wide
+background: '/assets/images/azure-storage-private-endpoint.jpg'
+toc: true
 ---
 
 I recently was helping someone troubleshoot an issue some of their users were experiencing.
