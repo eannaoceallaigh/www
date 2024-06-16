@@ -643,7 +643,7 @@ The values that are available are inherited from the upstream chart and you can 
 
 In the example above, I am using an existing persistentVolume and persistentVolumeClaim that I have created separately but you can remove the `existingClaim` value to tell the chart to create its own persistentVolume and persistentVolumeClaim on the cluster. Be aware, however, that you may experience permissions errors if you have not allowed the cluster to provision storage.
 
-In the example above, I am also using a secret and environment variable to store the password for redis as detailed in [this section](https://www.eannaoceallaigh.com/blog/deploy-oauth-proxy/#using-kubernetes-secrets) of this guide. You can just add another secret to the yaml file and another environment variable to the helmrelease:
+In the example above, I am also using a secret and environment variable to store the password for redis as detailed in [this section](https://www.eannaoCeallaigh.com/blog/deploy-oauth-proxy/#using-kubernetes-secrets) of this guide. You can just add another secret to the yaml file and another environment variable to the helmrelease:
 
 <details>
 <summary>View code</summary>
@@ -685,6 +685,6 @@ extraEnv:
 
 In this guide, we've explored how to deploy an application to a kubernetes cluster and how to integrate OAuth2 Proxy with Traefik to force visitors to authenticate to Azure AD before they are allowed access our application.
 
-YAML files for the helm releases, ingresses and other kubernetes resources can be found in [this GitHub repo](https://github.com/eannaoceallaigh/oauth2-proxy-docs/tree/main). Feel free to fork it and get started deploying OAuth2 Proxy with Traefik on Kubernetes.
+YAML files for the helm releases, ingresses and other kubernetes resources can be found in [this GitHub repo](https://github.com/eannaoCeallaigh/oauth2-proxy-docs/tree/main). Feel free to fork it and get started deploying OAuth2 Proxy with Traefik on Kubernetes.
 
-If you have any suggestions on how this guide could be improved or if you've spotted an error that needs fixing, let me know by raising a [GitHub issue](https://github.com/eannaoceallaigh/www/issues/new).
+If you have any suggestions on how this guide could be improved or if you've spotted an error that needs fixing, let me know by raising a [GitHub issue](https://github.com/eannaoCeallaigh/www/issues/new).

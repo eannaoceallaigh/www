@@ -1,13 +1,13 @@
-title:              Éanna Ó'Ceallaigh
-email:              info@eannaoceallaigh.com
+title:              Éanna Ó Ceallaigh
+email:              info@eannaoCeallaigh.com
 description:        A personal blog site focusing on technology
-author:             Éanna Ó'Ceallaigh
+author:             Éanna Ó Ceallaigh
 baseurl:            "/blog"
-url:                "https://www.eannaoceallaigh.com"
+url:                "https://www.eannaoCeallaigh.com"
 permalink:          /blog/:title/
 
 # Social Profiles
-github_username:    eannaoceallaigh
+github_username:    eannaoCeallaigh
 
 # Add your google-analytics ID here to activate google analytics
 google_analytics:   UA-XXXXXXXXX-X # out your google-analytics code
