@@ -3,7 +3,7 @@ email:              info@eannaoceallaigh.com
 description:        A personal blog site focusing on technology
 author:             Éanna Ó'Ceallaigh
 baseurl:            "/blog"
-url:                "https://www.eannaoceallaigh.com"
+url:                "https://www.eannaoceallaigh.com/blog"
 permalink:          /:title
 
 # Social Profiles
