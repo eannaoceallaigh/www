@@ -285,7 +285,7 @@ oauth2-proxy-59cb698789-mtmwq   1/1     Running   0          12h
 
 If you've configured your DNS, you should be able to connect to OAuth2 Proxy in a web browser. Since we've configured the upstream as `static://202`, we're greeted with a white page with the word `Authenticated` in the top left corner.
 
-<img src="assets/images/oauth2-proxy-authenticated.png" alt="Blank authenticated page">
+<img src="/assets/images/oauth2-proxy-authenticated.png" alt="Blank authenticated page">
 
 # Deploying an application behind OAuth2 Proxy
 
@@ -386,7 +386,7 @@ spec:
 </details><br>
 These manifests should deploy the Hello Kubernetes application and if you open the URL (the host line in your ingress from above) in your web browser, you should see something like this:
 
-<img src="assets/images/hello-kubernetes.png" alt="Hello Kubernetes">
+<img src="/assets/images/hello-kubernetes.png" alt="Hello Kubernetes">
 
 In order to force visitors to authenticate, we need to tell Traefik to send unauthenticated requests to OAuth2 Proxy. This is where our middlewares now come into play.
 
@@ -429,7 +429,7 @@ Once this is deployed, open the Hello Kubernetes application in a private browsi
 
 You should be redirected to a Microsoft sign in page.
 
-<img src="assets/images/microsoft-login-page.png" alt="Microsoft login page">
+<img src="/assets/images/microsoft-login-page.png" alt="Microsoft login page">
 
 Sign in and then you'll be redirected to the Hello Kubernetes application.
 
