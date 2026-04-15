@@ -30,7 +30,7 @@ The tool is mainly focused on using NGINX reverse proxy so much of the official 
 
 # Setup for Azure AD
 
-The official docs have clear guidance on setting up an application registration in Azure Active Directory. Follow their [guide](https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/oauth_provider#azure-auth-provider) for this step and come back here once you've completed that.
+The official docs have clear guidance on setting up an application registration in Azure Active Directory. Follow their [guide](https://oauth2-proxy.github.io/oauth2-proxy/configuration/providers/ms_entra_id) for this step and come back here once you've completed that.
 
 For this we will be using the v1 endpoint but I have also enabled the v2 endpoint in the application manifest as per point 4 in the linked guide.
 
@@ -128,7 +128,7 @@ spec:
 
 ### Configuration options
 
-You can find explanations for what these options mean in the [OAuth2 Proxy docs](https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/overview) but I want to give you some pointers on why these particular arguments are useful / required.
+You can find explanations for what these options mean in the [OAuth2 Proxy docs](https://oauth2-proxy.github.io/oauth2-proxy/configuration/overview) but I want to give you some pointers on why these particular arguments are useful / required.
 
 | Argument| Example value | Why is it needed? |
 | --- | --- | --- |
@@ -136,7 +136,7 @@ You can find explanations for what these options mean in the [OAuth2 Proxy docs]
 | client-id | "abcd1234-5678-91ef-23gh-ij4kl5mn6o" | The client id of the app registration you will have created in Azure AD |
 | client-secret | "abcdefghijklmnopqrstuvwxyz1234456789?~!@$%" | The client secret you will have generated for the app registration in Azure AD |
 | cookie-domain | ".domain.com, .domain.net" | Used to cache cookies for the correct domain. It can be set to "*" to allow all domains |
-| cookie-secret | "wj7fY0MwSPKZZoxUaUNnoeqgN0lEr5f-F6vGIFO1AR4=" | A randomly generated secret from the command line on your computer. See [here](https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/overview#generating-a-cookie-secret) |
+| cookie-secret | "wj7fY0MwSPKZZoxUaUNnoeqgN0lEr5f-F6vGIFO1AR4=" | A randomly generated secret from the command line on your computer. See [here](https://oauth2-proxy.github.io/oauth2-proxy/configuration/overview#generating-a-cookie-secret) |
 | email-domain | "domain.com" | Can be used to restrict sign in to only certain domains. Use "*" to allow all domains |
 | extra-jwt-issuers | "https://login.microsoftonline.com/YOUR-TENANT-ID/v2.0=YOUR-CLIENT-ID" | A list of extra JSON Web Token (JWT) issuer URLs. This is needed as there are two endpoints that Azure AD offers for authentication  |
 | oidc-issuer-url | "https://sts.windows.net/YOUR-TENANT-ID/" | The OpenID Connect issuer URL for your provider, in this case, Azure AD |
@@ -263,7 +263,7 @@ The forwardAuth address can be set to a fully qualified domain name but it shoul
 
 The cluster DNS name for the service follows the format `servicename.namespace`
 
-The official docs have an [example](https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/overview#forwardauth-with-401-errors-middleware) that uses the `/oauth2/auth` endpoint in the address, however, I have found that this does not always work, so you should use the `/oauth2/auth_or_start` endpoint instead as per my example.
+The official docs have an [example](https://oauth2-proxy.github.io/oauth2-proxy/configuration/integrations/traefik?_highlight=forward#forwardauth-with-401-errors-middleware) that uses the `/oauth2/auth` endpoint in the address, however, I have found that this does not always work, so you should use the `/oauth2/auth_or_start` endpoint instead as per my example.
 
 See also: [https://github.com/oauth2-proxy/oauth2-proxy/issues/46](https://github.com/oauth2-proxy/oauth2-proxy/issues/46)
 
@@ -492,7 +492,7 @@ In the helm release below, we have set `proxyVarsAsSecrets` to `true` and added 
 
 The environment variables are largely the same as the arguments they replace but in upper case and with underscores instead of hyphens.
 
-More information on this can be found in the OAuth2 Proxy [docs](https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/overview#environment-variables)
+More information on this can be found in the OAuth2 Proxy [docs](https://oauth2-proxy.github.io/oauth2-proxy/configuration/overview#environment-variables)
 
 You could replace all of the `extraArgs` section with secrets if you wanted to but none of those remaining are sensitive values so there's not much to be gained in doing so and it could make it harder for people looking at your code to understand what's going on and see what arguments are set to what values when troubleshooting.
 
