@@ -32,6 +32,8 @@ The tool is mainly focused on using NGINX reverse proxy so much of the official 
 
 The official docs have clear guidance on setting up an application registration in Azure Active Directory. Follow their [guide](https://oauth2-proxy.github.io/oauth2-proxy/configuration/providers/ms_entra_id) for this step and come back here once you've completed that.
 
+Note: This guide refers to Azure AD which has been renamed to Entra ID. As such, there may be values in this guide which are out of date but the general guidance is still valid. Please refer to the [official docs](https://oauth2-proxy.github.io/oauth2-proxy/configuration/providers/ms_entra_id) for the latest flags accepted by the provider.
+
 For this we will be using the v1 endpoint but I have also enabled the v2 endpoint in the application manifest as per point 4 in the linked guide.
 
 # Deploying OAuth2 Proxy to Kubernetes using Flux and Helm
